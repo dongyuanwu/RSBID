@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<title>Introduction to the RSBID Package</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to the RSBID Package</h1>
+
+
+
+<p>The <strong>RSBID</strong> (short for Resampling Strategies for Binary Imbalanced Dadasets) package contains functions of resampling strategies to make the binary imbalanced datasets be more balanced. It is important for an imbalanced dataset before applying a classification algorithm, for the reason that class imbalance will lead to a bad performance of classifiers.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(RSBID)</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(randomForest)</a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(pROC)</a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="kw">library</span>(caret)</a></code></pre></div>
+<div id="data-import" class="section level2">
+<h2>1 Data Import</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">data</span>(abalone)</a>
+<a class="sourceLine" id="cb2-2" title="2">abalone<span class="op">$</span>Class &lt;-<span class="st"> </span><span class="kw">as.factor</span>(<span class="kw">gsub</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;&quot;</span>, abalone<span class="op">$</span>Class))</a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="kw">str</span>(abalone)</a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="co">#&gt; &#39;data.frame&#39;:    731 obs. of  9 variables:</span></a>
+<a class="sourceLine" id="cb2-5" title="5"><span class="co">#&gt;  $ Sex           : Factor w/ 3 levels &quot;F&quot;,&quot;I&quot;,&quot;M&quot;: 1 3 3 1 3 3 1 3 1 3 ...</span></a>
+<a class="sourceLine" id="cb2-6" title="6"><span class="co">#&gt;  $ Length        : num  0.53 0.475 0.45 0.55 0.665 0.355 0.45 0.47 0.525 0.505 ...</span></a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="co">#&gt;  $ Diameter      : num  0.42 0.37 0.32 0.415 0.525 0.29 0.335 0.37 0.425 0.405 ...</span></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt;  $ Height        : num  0.135 0.125 0.1 0.135 0.165 0.09 0.105 0.12 0.16 0.11 ...</span></a>
+<a class="sourceLine" id="cb2-9" title="9"><span class="co">#&gt;  $ Whole_weight  : num  0.677 0.509 0.381 0.763 1.338 ...</span></a>
+<a class="sourceLine" id="cb2-10" title="10"><span class="co">#&gt;  $ Shucked_weight: num  0.257 0.216 0.171 0.318 0.551 ...</span></a>
+<a class="sourceLine" id="cb2-11" title="11"><span class="co">#&gt;  $ Viscera_weight: num  0.141 0.112 0.075 0.21 0.357 ...</span></a>
+<a class="sourceLine" id="cb2-12" title="12"><span class="co">#&gt;  $ Shell_weight  : num  0.21 0.165 0.115 0.2 0.35 0.09 0.115 0.14 0.245 0.175 ...</span></a>
+<a class="sourceLine" id="cb2-13" title="13"><span class="co">#&gt;  $ Class         : Factor w/ 2 levels &quot;negative&quot;,&quot;positive&quot;: 1 1 1 1 2 1 1 1 1 1 ...</span></a></code></pre></div>
+<p>The <em>abalone</em> dataset is available in the <strong>RSBID</strong> package. It has 731 observations and 9 variables. In the outcome <em>Class</em>, the possitive examples belong to class 18 and the negative examples belong to class 9. We would like to find the difference between these two kinds of abalone. Therefore, a good performance of a classifier to classify them correctly is expected.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">table</span>(abalone<span class="op">$</span>Class)</a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt; negative positive </span></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt;      689       42</span></a></code></pre></div>
+<p>As we can see, there are 689 negative examples and 42 positive examples. The imbalanced ratio (IR) is about 16.4.</p>
+</div>
+<div id="model-building-for-a-imbalanced-dataset" class="section level2">
+<h2>2 Model Building for a Imbalanced Dataset</h2>
+<p>First of all, we need to separate this dataset into a training set and a testing set. 0.8 would be used as the cutoff.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">set.seed</span>(<span class="dv">2019</span>)</a>
+<a class="sourceLine" id="cb4-2" title="2">inTrain &lt;-<span class="st"> </span><span class="kw">createDataPartition</span>(abalone<span class="op">$</span>Class, <span class="dt">p =</span> <span class="fl">0.8</span>, <span class="dt">list =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb4-3" title="3">abalone_train &lt;-<span class="st"> </span>abalone[inTrain, ]</a>
+<a class="sourceLine" id="cb4-4" title="4">abalone_test &lt;-<span class="st"> </span>abalone[<span class="op">-</span>inTrain, ]</a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="kw">table</span>(abalone_train<span class="op">$</span>Class)</a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt; negative positive </span></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt;      552       34</span></a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="kw">table</span>(abalone_test<span class="op">$</span>Class)</a>
+<a class="sourceLine" id="cb4-10" title="10"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-11" title="11"><span class="co">#&gt; negative positive </span></a>
+<a class="sourceLine" id="cb4-12" title="12"><span class="co">#&gt;      137        8</span></a></code></pre></div>
+<p>The training set and the testing set are both imbalanced.</p>
+<p>Now we apply Random Forests on this imbalanced dataset to check the classification performance.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">set.seed</span>(<span class="dv">2019</span>)</a>
+<a class="sourceLine" id="cb5-2" title="2">fit_orig &lt;-<span class="st"> </span><span class="kw">randomForest</span>(Class <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> abalone_train)</a>
+<a class="sourceLine" id="cb5-3" title="3">pred_class &lt;-<span class="st"> </span><span class="kw">predict</span>(fit_orig, abalone_test, <span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a>
+<a class="sourceLine" id="cb5-4" title="4"></a>
+<a class="sourceLine" id="cb5-5" title="5"><span class="kw">confusionMatrix</span>(<span class="dt">data=</span>pred_class, <span class="dt">reference=</span>abalone_test<span class="op">$</span>Class,</a>
+<a class="sourceLine" id="cb5-6" title="6">                <span class="dt">mode =</span> <span class="st">&quot;sens_spec&quot;</span>, <span class="dt">positive=</span><span class="st">&quot;positive&quot;</span>)</a>
+<a class="sourceLine" id="cb5-7" title="7"><span class="co">#&gt; Confusion Matrix and Statistics</span></a>
+<a class="sourceLine" id="cb5-8" title="8"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-9" title="9"><span class="co">#&gt;           Reference</span></a>
+<a class="sourceLine" id="cb5-10" title="10"><span class="co">#&gt; Prediction negative positive</span></a>
+<a class="sourceLine" id="cb5-11" title="11"><span class="co">#&gt;   negative      137        8</span></a>
+<a class="sourceLine" id="cb5-12" title="12"><span class="co">#&gt;   positive        0        0</span></a>
+<a class="sourceLine" id="cb5-13" title="13"><span class="co">#&gt;                                           </span></a>
+<a class="sourceLine" id="cb5-14" title="14"><span class="co">#&gt;                Accuracy : 0.9448          </span></a>
+<a class="sourceLine" id="cb5-15" title="15"><span class="co">#&gt;                  95% CI : (0.8942, 0.9759)</span></a>
+<a class="sourceLine" id="cb5-16" title="16"><span class="co">#&gt;     No Information Rate : 0.9448          </span></a>
+<a class="sourceLine" id="cb5-17" title="17"><span class="co">#&gt;     P-Value [Acc &gt; NIR] : 0.59258         </span></a>
+<a class="sourceLine" id="cb5-18" title="18"><span class="co">#&gt;                                           </span></a>
+<a class="sourceLine" id="cb5-19" title="19"><span class="co">#&gt;                   Kappa : 0               </span></a>
+<a class="sourceLine" id="cb5-20" title="20"><span class="co">#&gt;                                           </span></a>
+<a class="sourceLine" id="cb5-21" title="21"><span class="co">#&gt;  Mcnemar&#39;s Test P-Value : 0.01333         </span></a>
+<a class="sourceLine" id="cb5-22" title="22"><span class="co">#&gt;                                           </span></a>
+<a class="sourceLine" id="cb5-23" title="23"><span class="co">#&gt;             Sensitivity : 0.00000         </span></a>
+<a class="sourceLine" id="cb5-24" title="24"><span class="co">#&gt;             Specificity : 1.00000         </span></a>
+<a class="sourceLine" id="cb5-25" title="25"><span class="co">#&gt;          Pos Pred Value :     NaN         </span></a>
+<a class="sourceLine" id="cb5-26" title="26"><span class="co">#&gt;          Neg Pred Value : 0.94483         </span></a>
+<a class="sourceLine" id="cb5-27" title="27"><span class="co">#&gt;              Prevalence : 0.05517         </span></a>
+<a class="sourceLine" id="cb5-28" title="28"><span class="co">#&gt;          Detection Rate : 0.00000         </span></a>
+<a class="sourceLine" id="cb5-29" title="29"><span class="co">#&gt;    Detection Prevalence : 0.00000         </span></a>
+<a class="sourceLine" id="cb5-30" title="30"><span class="co">#&gt;       Balanced Accuracy : 0.50000         </span></a>
+<a class="sourceLine" id="cb5-31" title="31"><span class="co">#&gt;                                           </span></a>
+<a class="sourceLine" id="cb5-32" title="32"><span class="co">#&gt;        &#39;Positive&#39; Class : positive        </span></a>
+<a class="sourceLine" id="cb5-33" title="33"><span class="co">#&gt; </span></a></code></pre></div>
+<p>According to the result, the accuracy of this model is actually very high. But all positive examples were classified incorrectly so that sensitivity is 0. This performance is very bad. We can check the ROC curve and its AUC.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">pred_prob &lt;-<span class="st"> </span><span class="kw">predict</span>(fit_orig, abalone_test, <span class="dt">type=</span><span class="st">&quot;prob&quot;</span>)[, <span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb6-2" title="2">modelroc &lt;-<span class="st"> </span><span class="kw">roc</span>(abalone_test<span class="op">$</span>Class, pred_prob)</a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="kw">plot</span>(modelroc, <span class="dt">print.auc=</span><span class="ot">TRUE</span>, <span class="dt">auc.polygon=</span><span class="ot">TRUE</span>, <span class="dt">max.auc.polygon=</span><span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb6-4" title="4">     <span class="dt">auc.polygon.col=</span><span class="st">&quot;skyblue&quot;</span>, <span class="dt">print.thres=</span><span class="ot">TRUE</span>, <span class="dt">legacy.axes=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<p>As we can see, the ROC curve is actually very terrible.</p>
+</div>
+<div id="model-building-for-a-balanced-dataset" class="section level2">
+<h2>3 Model Building for a Balanced Dataset</h2>
+<p>Now we used the Under-Sampling Based on Clustering (SBC) algorithm as an example to balance the dataset.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">set.seed</span>(<span class="dv">2019</span>)</a>
+<a class="sourceLine" id="cb7-2" title="2">train_sbc &lt;-<span class="st"> </span><span class="kw">SBC</span>(abalone, <span class="st">&quot;Class&quot;</span>)</a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="kw">table</span>(train_sbc<span class="op">$</span>Class)</a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="co">#&gt; negative positive </span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt;       42       42</span></a></code></pre></div>
+<p>The dataset has been balanced now. Then build a new Random Forest model for this balanced dataset.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">set.seed</span>(<span class="dv">2019</span>)</a>
+<a class="sourceLine" id="cb8-2" title="2">fit_sbc &lt;-<span class="st"> </span><span class="kw">randomForest</span>(Class <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train_sbc)</a>
+<a class="sourceLine" id="cb8-3" title="3">pred_class_sbc &lt;-<span class="st"> </span><span class="kw">predict</span>(fit_sbc, abalone_test, <span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="kw">confusionMatrix</span>(<span class="dt">data=</span>pred_class_sbc, <span class="dt">reference=</span>abalone_test<span class="op">$</span>Class,</a>
+<a class="sourceLine" id="cb8-5" title="5">                <span class="dt">mode =</span> <span class="st">&quot;sens_spec&quot;</span>, <span class="dt">positive=</span><span class="st">&quot;positive&quot;</span>)</a>
+<a class="sourceLine" id="cb8-6" title="6"><span class="co">#&gt; Confusion Matrix and Statistics</span></a>
+<a class="sourceLine" id="cb8-7" title="7"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-8" title="8"><span class="co">#&gt;           Reference</span></a>
+<a class="sourceLine" id="cb8-9" title="9"><span class="co">#&gt; Prediction negative positive</span></a>
+<a class="sourceLine" id="cb8-10" title="10"><span class="co">#&gt;   negative      102        0</span></a>
+<a class="sourceLine" id="cb8-11" title="11"><span class="co">#&gt;   positive       35        8</span></a>
+<a class="sourceLine" id="cb8-12" title="12"><span class="co">#&gt;                                           </span></a>
+<a class="sourceLine" id="cb8-13" title="13"><span class="co">#&gt;                Accuracy : 0.7586          </span></a>
+<a class="sourceLine" id="cb8-14" title="14"><span class="co">#&gt;                  95% CI : (0.6806, 0.8257)</span></a>
+<a class="sourceLine" id="cb8-15" title="15"><span class="co">#&gt;     No Information Rate : 0.9448          </span></a>
+<a class="sourceLine" id="cb8-16" title="16"><span class="co">#&gt;     P-Value [Acc &gt; NIR] : 1               </span></a>
+<a class="sourceLine" id="cb8-17" title="17"><span class="co">#&gt;                                           </span></a>
+<a class="sourceLine" id="cb8-18" title="18"><span class="co">#&gt;                   Kappa : 0.2433          </span></a>
+<a class="sourceLine" id="cb8-19" title="19"><span class="co">#&gt;                                           </span></a>
+<a class="sourceLine" id="cb8-20" title="20"><span class="co">#&gt;  Mcnemar&#39;s Test P-Value : 9.081e-09       </span></a>
+<a class="sourceLine" id="cb8-21" title="21"><span class="co">#&gt;                                           </span></a>
+<a class="sourceLine" id="cb8-22" title="22"><span class="co">#&gt;             Sensitivity : 1.00000         </span></a>
+<a class="sourceLine" id="cb8-23" title="23"><span class="co">#&gt;             Specificity : 0.74453         </span></a>
+<a class="sourceLine" id="cb8-24" title="24"><span class="co">#&gt;          Pos Pred Value : 0.18605         </span></a>
+<a class="sourceLine" id="cb8-25" title="25"><span class="co">#&gt;          Neg Pred Value : 1.00000         </span></a>
+<a class="sourceLine" id="cb8-26" title="26"><span class="co">#&gt;              Prevalence : 0.05517         </span></a>
+<a class="sourceLine" id="cb8-27" title="27"><span class="co">#&gt;          Detection Rate : 0.05517         </span></a>
+<a class="sourceLine" id="cb8-28" title="28"><span class="co">#&gt;    Detection Prevalence : 0.29655         </span></a>
+<a class="sourceLine" id="cb8-29" title="29"><span class="co">#&gt;       Balanced Accuracy : 0.87226         </span></a>
+<a class="sourceLine" id="cb8-30" title="30"><span class="co">#&gt;                                           </span></a>
+<a class="sourceLine" id="cb8-31" title="31"><span class="co">#&gt;        &#39;Positive&#39; Class : positive        </span></a>
+<a class="sourceLine" id="cb8-32" title="32"><span class="co">#&gt; </span></a></code></pre></div>
+<p>Although the accuracy is not as good as the previous model, the sensitivity is improved much higher than before. Now check the ROC curve and its AUC.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">pred_prob_sbc &lt;-<span class="st"> </span><span class="kw">predict</span>(fit_sbc, abalone_test, <span class="dt">type=</span><span class="st">&quot;prob&quot;</span>)[, <span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb9-2" title="2">modelroc_sbc &lt;-<span class="st"> </span><span class="kw">roc</span>(abalone_test<span class="op">$</span>Class, pred_prob_sbc)</a>
+<a class="sourceLine" id="cb9-3" title="3"><span class="kw">plot</span>(modelroc_sbc, <span class="dt">print.auc=</span><span class="ot">TRUE</span>, <span class="dt">auc.polygon=</span><span class="ot">TRUE</span>, <span class="dt">max.auc.polygon=</span><span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb9-4" title="4">     <span class="dt">auc.polygon.col=</span><span class="st">&quot;skyblue&quot;</span>, <span class="dt">print.thres=</span><span class="ot">TRUE</span>, <span class="dt">legacy.axes=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<p>The performance is much better than before.</p>
+</div>
+<div id="comparison-among-four-resampling-strategies" class="section level2">
+<h2>4 Comparison among Four Resampling Strategies</h2>
+<p>The <strong>RSBID</strong> package provides four resampling strategies: random over-sampling algorithm (ROS), random under-sampling algorithm (RUS), under-sampling based on clustering algorithm (SBC), and synthetic minority over-sampling technique (SMOTE). The classification performance of Random Forests on four balanced datasets by respectively using these four strategies would be shown below.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">set.seed</span>(<span class="dv">2019</span>)</a>
+<a class="sourceLine" id="cb10-2" title="2">train_ros &lt;-<span class="st"> </span><span class="kw">ROS</span>(abalone, <span class="st">&quot;Class&quot;</span>)</a>
+<a class="sourceLine" id="cb10-3" title="3">train_rus &lt;-<span class="st"> </span><span class="kw">RUS</span>(abalone, <span class="st">&quot;Class&quot;</span>)</a>
+<a class="sourceLine" id="cb10-4" title="4">train_smotenc &lt;-<span class="st"> </span><span class="kw">SMOTE_NC</span>(abalone, <span class="st">&quot;Class&quot;</span>)</a>
+<a class="sourceLine" id="cb10-5" title="5"></a>
+<a class="sourceLine" id="cb10-6" title="6">fit_ros &lt;-<span class="st"> </span><span class="kw">randomForest</span>(Class <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>train_ros)</a>
+<a class="sourceLine" id="cb10-7" title="7">fit_rus &lt;-<span class="st"> </span><span class="kw">randomForest</span>(Class <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>train_rus)</a>
+<a class="sourceLine" id="cb10-8" title="8">fit_smotenc &lt;-<span class="st"> </span><span class="kw">randomForest</span>(Class <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>train_smotenc)</a>
+<a class="sourceLine" id="cb10-9" title="9"></a>
+<a class="sourceLine" id="cb10-10" title="10">pred_prob_ros &lt;-<span class="st"> </span><span class="kw">predict</span>(fit_ros, abalone_test, <span class="dt">type=</span><span class="st">&quot;prob&quot;</span>)[, <span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb10-11" title="11">modelroc_ros &lt;-<span class="st"> </span><span class="kw">roc</span>(abalone_test<span class="op">$</span>Class, pred_prob_ros)</a>
+<a class="sourceLine" id="cb10-12" title="12">pred_prob_rus &lt;-<span class="st"> </span><span class="kw">predict</span>(fit_rus, abalone_test, <span class="dt">type=</span><span class="st">&quot;prob&quot;</span>)[, <span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb10-13" title="13">modelroc_rus &lt;-<span class="st"> </span><span class="kw">roc</span>(abalone_test<span class="op">$</span>Class, pred_prob_rus)</a>
+<a class="sourceLine" id="cb10-14" title="14">pred_prob_smotenc &lt;-<span class="st"> </span><span class="kw">predict</span>(fit_smotenc, abalone_test, <span class="dt">type=</span><span class="st">&quot;prob&quot;</span>)[, <span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb10-15" title="15">modelroc_smotenc &lt;-<span class="st"> </span><span class="kw">roc</span>(abalone_test<span class="op">$</span>Class, pred_prob_smotenc)</a>
+<a class="sourceLine" id="cb10-16" title="16"></a>
+<a class="sourceLine" id="cb10-17" title="17"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb10-18" title="18"><span class="kw">plot</span>(modelroc_ros, <span class="dt">print.auc=</span><span class="ot">TRUE</span>, <span class="dt">auc.polygon=</span><span class="ot">TRUE</span>, <span class="dt">max.auc.polygon=</span><span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb10-19" title="19">     <span class="dt">auc.polygon.col=</span><span class="st">&quot;skyblue&quot;</span>, <span class="dt">print.thres=</span><span class="ot">TRUE</span>, <span class="dt">legacy.axes=</span><span class="ot">TRUE</span>, <span class="dt">main=</span><span class="st">&quot;ROS&quot;</span>)</a>
+<a class="sourceLine" id="cb10-20" title="20"><span class="kw">plot</span>(modelroc_rus, <span class="dt">print.auc=</span><span class="ot">TRUE</span>, <span class="dt">auc.polygon=</span><span class="ot">TRUE</span>, <span class="dt">max.auc.polygon=</span><span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb10-21" title="21">     <span class="dt">auc.polygon.col=</span><span class="st">&quot;skyblue&quot;</span>, <span class="dt">print.thres=</span><span class="ot">TRUE</span>, <span class="dt">legacy.axes=</span><span class="ot">TRUE</span>, <span class="dt">main=</span><span class="st">&quot;RUS&quot;</span>)</a>
+<a class="sourceLine" id="cb10-22" title="22"><span class="kw">plot</span>(modelroc_smotenc, <span class="dt">print.auc=</span><span class="ot">TRUE</span>, <span class="dt">auc.polygon=</span><span class="ot">TRUE</span>, <span class="dt">max.auc.polygon=</span><span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb10-23" title="23">     <span class="dt">auc.polygon.col=</span><span class="st">&quot;skyblue&quot;</span>, <span class="dt">print.thres=</span><span class="ot">TRUE</span>, <span class="dt">legacy.axes=</span><span class="ot">TRUE</span>, <span class="dt">main=</span><span class="st">&quot;SMOTE-NC&quot;</span>)</a>
+<a class="sourceLine" id="cb10-24" title="24"><span class="kw">plot</span>(modelroc_sbc, <span class="dt">print.auc=</span><span class="ot">TRUE</span>, <span class="dt">auc.polygon=</span><span class="ot">TRUE</span>, <span class="dt">max.auc.polygon=</span><span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb10-25" title="25">     <span class="dt">auc.polygon.col=</span><span class="st">&quot;skyblue&quot;</span>, <span class="dt">print.thres=</span><span class="ot">TRUE</span>, <span class="dt">legacy.axes=</span><span class="ot">TRUE</span>, <span class="dt">main=</span><span class="st">&quot;SBC&quot;</span>)</a></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<p>As we can see, all of them performed much better than the original imbalanced dataset.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

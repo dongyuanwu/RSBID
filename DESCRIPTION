@@ -1,0 +1,30 @@
+Package: RSBID
+Title: Resampling Strategies for Binary Imbalanced Dadasets 
+Version: 0.0.0.9000
+Authors@R: c(
+    person(given = "Dongyuan",
+           family = "Wu",
+           role = c("aut", "cre"),
+           email = "dongyuanwu@ufl.edu"),
+	person(given = "Yingjie",
+           family = "Qiu",
+           role = "aut",
+           email = "yingjie.qiu@ufl.edu"),
+	person(given = "Mingyue",
+           family = "Li",
+           role = "aut",
+           email = "limingyue@ufl.edu")
+	)
+Description: This package contains functions of resampling strategies to make the binary imbalanced datasets be more balanced. It is important for an imbalanced datasets before applying a classification algorithm, for the reason that class imbalance will lead to a bad performance of classifiers. 
+Depends: R (>= 3.6.0), stats, FNN, clustMixType, klaR
+License: GPL (>= 2)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
+Suggests: 
+    knitr,
+    rmarkdown,
+	randomForest,
+	pROC,
+	caret
+VignetteBuilder: knitr, randomForest, pROC, caret

@@ -1,0 +1,144 @@
+---
+title: "Introduction to the RSBID Package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to the RSBID Package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  fig.align="center"
+)
+```
+
+The **RSBID** (short for Resampling Strategies for Binary Imbalanced Dadasets) package contains functions of resampling strategies to make the binary imbalanced datasets be more balanced. It is important for an imbalanced dataset before applying a classification algorithm, for the reason that class imbalance will lead to a bad performance of classifiers.
+
+```{r setup}
+library(RSBID)
+library(randomForest)
+library(pROC)
+library(caret)
+```
+
+## 1 Data Import
+
+```{r}
+data(abalone)
+abalone$Class <- as.factor(gsub(" ", "", abalone$Class))
+str(abalone)
+```
+
+The *abalone* dataset is available in the **RSBID** package. It has `r nrow(abalone)` observations and `r ncol(abalone)` variables. In the outcome *Class*, the possitive examples belong to class 18 and the negative examples belong to class 9. We would like to find the difference between these two kinds of abalone. Therefore, a good performance of a classifier to classify them correctly is expected.
+
+```{r}
+table(abalone$Class)
+```
+
+As we can see, there are `r table(abalone$Class)[1]` negative examples and `r table(abalone$Class)[2]` positive examples. The imbalanced ratio (IR) is about `r round(table(abalone$Class)[1]/table(abalone$Class)[2], 2)`. 
+
+## 2 Model Building for a Imbalanced Dataset
+
+First of all, we need to separate this dataset into a training set and a testing set. 0.8 would be used as the cutoff.
+
+```{r}
+set.seed(2019)
+inTrain <- createDataPartition(abalone$Class, p = 0.8, list = FALSE)
+abalone_train <- abalone[inTrain, ]
+abalone_test <- abalone[-inTrain, ]
+table(abalone_train$Class)
+table(abalone_test$Class)
+```
+
+The training set and the testing set are both imbalanced.
+
+Now we apply Random Forests on this imbalanced dataset to check the classification performance.
+
+```{r}
+set.seed(2019)
+fit_orig <- randomForest(Class ~ ., data = abalone_train)
+pred_class <- predict(fit_orig, abalone_test, type="response")
+
+confusionMatrix(data=pred_class, reference=abalone_test$Class,
+                mode = "sens_spec", positive="positive")
+```
+
+According to the result, the accuracy of this model is actually very high. But all positive examples were classified incorrectly so that sensitivity is 0. This performance is very bad. We can check the ROC curve and its AUC.
+
+```{r, fig.height=4, fig.width=4.5}
+pred_prob <- predict(fit_orig, abalone_test, type="prob")[, 2]
+modelroc <- roc(abalone_test$Class, pred_prob)
+plot(modelroc, print.auc=TRUE, auc.polygon=TRUE, max.auc.polygon=TRUE, 
+     auc.polygon.col="skyblue", print.thres=TRUE, legacy.axes=TRUE)
+```
+
+As we can see, the ROC curve is actually very terrible.
+
+## 3 Model Building for a Balanced Dataset
+
+Now we used the Under-Sampling Based on Clustering (SBC) algorithm as an example to balance the dataset.
+
+```{r}
+set.seed(2019)
+train_sbc <- SBC(abalone, "Class")
+table(train_sbc$Class)
+```
+
+The dataset has been balanced now. Then build a new Random Forest model for this balanced dataset.
+
+```{r}
+set.seed(2019)
+fit_sbc <- randomForest(Class ~ ., data = train_sbc)
+pred_class_sbc <- predict(fit_sbc, abalone_test, type="response")
+confusionMatrix(data=pred_class_sbc, reference=abalone_test$Class,
+                mode = "sens_spec", positive="positive")
+```
+
+Although the accuracy is not as good as the previous model, the sensitivity is improved much higher than before. Now check the ROC curve and its AUC.
+
+```{r, fig.height=4, fig.width=4.5}
+pred_prob_sbc <- predict(fit_sbc, abalone_test, type="prob")[, 2]
+modelroc_sbc <- roc(abalone_test$Class, pred_prob_sbc)
+plot(modelroc_sbc, print.auc=TRUE, auc.polygon=TRUE, max.auc.polygon=TRUE, 
+     auc.polygon.col="skyblue", print.thres=TRUE, legacy.axes=TRUE)
+```
+
+The performance is much better than before.
+
+## 4 Comparison among Four Resampling Strategies
+
+The **RSBID** package provides four resampling strategies: random over-sampling algorithm (ROS), random under-sampling algorithm (RUS), under-sampling based on clustering algorithm (SBC), and synthetic minority over-sampling technique (SMOTE). The classification performance of Random Forests on four balanced datasets by respectively using these four strategies would be shown below.
+
+```{r, fig.height=6.5, fig.width=7}
+set.seed(2019)
+train_ros <- ROS(abalone, "Class")
+train_rus <- RUS(abalone, "Class")
+train_smotenc <- SMOTE_NC(abalone, "Class")
+
+fit_ros <- randomForest(Class ~ ., data=train_ros)
+fit_rus <- randomForest(Class ~ ., data=train_rus)
+fit_smotenc <- randomForest(Class ~ ., data=train_smotenc)
+
+pred_prob_ros <- predict(fit_ros, abalone_test, type="prob")[, 2]
+modelroc_ros <- roc(abalone_test$Class, pred_prob_ros)
+pred_prob_rus <- predict(fit_rus, abalone_test, type="prob")[, 2]
+modelroc_rus <- roc(abalone_test$Class, pred_prob_rus)
+pred_prob_smotenc <- predict(fit_smotenc, abalone_test, type="prob")[, 2]
+modelroc_smotenc <- roc(abalone_test$Class, pred_prob_smotenc)
+
+par(mfrow=c(2, 2))
+plot(modelroc_ros, print.auc=TRUE, auc.polygon=TRUE, max.auc.polygon=TRUE, 
+     auc.polygon.col="skyblue", print.thres=TRUE, legacy.axes=TRUE, main="ROS")
+plot(modelroc_rus, print.auc=TRUE, auc.polygon=TRUE, max.auc.polygon=TRUE, 
+     auc.polygon.col="skyblue", print.thres=TRUE, legacy.axes=TRUE, main="RUS")
+plot(modelroc_smotenc, print.auc=TRUE, auc.polygon=TRUE, max.auc.polygon=TRUE, 
+     auc.polygon.col="skyblue", print.thres=TRUE, legacy.axes=TRUE, main="SMOTE-NC")
+plot(modelroc_sbc, print.auc=TRUE, auc.polygon=TRUE, max.auc.polygon=TRUE, 
+     auc.polygon.col="skyblue", print.thres=TRUE, legacy.axes=TRUE, main="SBC")
+```
+
+As we can see, all of them performed much better than the original imbalanced dataset.
