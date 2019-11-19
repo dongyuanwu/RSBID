@@ -1,4 +1,4 @@
-# RSBID: Resampling Strategies for Binary Imbalanced Dadasets
+# RSBID: Resampling Strategies for Binary Imbalanced Datasets
 
 This package contains functions of resampling strategies to make the binary imbalanced datasets be more balanced. It is important for an imbalanced datasets before applying a classification algorithm, for the reason that class imbalance will lead to a bad performance of classifiers. 
 

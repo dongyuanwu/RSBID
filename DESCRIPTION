@@ -1,5 +1,5 @@
 Package: RSBID
-Title: Resampling Strategies for Binary Imbalanced Dadasets 
+Title: Resampling Strategies for Binary Imbalanced Datasets 
 Version: 0.0.0.9000
 Authors@R: c(
     person(given = "Dongyuan",
