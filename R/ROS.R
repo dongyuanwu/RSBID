@@ -24,6 +24,15 @@
 ##' table(newdata2$Class)
 
 ROS <- function(data, outcome, perc_maj = 100) {
+    if (is.character(outcome)) {
+        if (!(outcome %in% colnames(data))) {
+            stop(paste("This dataset doesn't have a variable names", outcome))
+        }
+    } else {
+        if (outcome < 1 | outcome > ncol(data)) {
+            stop(paste("This dataset doesn't have a variable whose column number is", outcome))
+        }
+    }
     y <- data[, outcome]
     if (length(table(y)) != 2) {
         stop("Sorry, the outcome is not binary, I can't solve this problem :(")
@@ -35,7 +44,7 @@ ROS <- function(data, outcome, perc_maj = 100) {
     maj_cl <- names(table(y))[which.max(table(y))]
     maj_ind <- which(y == maj_cl)
     min_ind_ori <- which(y != maj_cl)
-    min_ind <- c(min_ind_ori, sample(min_ind_ori, length(maj_ind) * perc_maj/100 - length(min_ind_ori), 
+    min_ind <- c(min_ind_ori, sample(min_ind_ori, length(maj_ind) * perc_maj/100 - length(min_ind_ori),
         replace = TRUE))
     newdata <- data[c(min_ind, maj_ind), ]
     return(newdata)

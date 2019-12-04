@@ -35,7 +35,15 @@
 
 
 SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
-    
+    if (is.character(outcome)) {
+        if (!(outcome %in% colnames(data))) {
+            stop(paste("This dataset doesn't have a variable names", outcome))
+        }
+    } else {
+        if (outcome < 1 | outcome > ncol(data)) {
+            stop(paste("This dataset doesn't have a variable whose column number is", outcome))
+        }
+    }
     y <- data[, outcome]
     if (class(outcome) == "character") {
         y_coln <- outcome
@@ -44,7 +52,7 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
         y_coln <- colnames(data)[outcome]
         y_ind <- outcome
     }
-    
+
     if (length(table(y)) != 2) {
         stop("Sorry, the outcome is not binary, I can't solve this problem :(")
     }
@@ -52,77 +60,77 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
         warning("The outcome is not a factor or character.")
         y <- as.factor(y)
     }
-    
+
     x_cl <- sapply(data[, -y_ind], class)
     if (all(x_cl == "numeric" | x_cl == "integer")) {
         stop("All variables are continuous, please use SMOTE function.")
-        
+
     } else if (all(x_cl == "character" | x_cl == "factor")) {
         stop("All variables are categorical, I can't solve this problem :(
              Maybe you can try to make one hot coding for each variable.")
-        
+
     } else if (all(x_cl == "numeric" | x_cl == "integer" | x_cl == "character" | x_cl == "factor")) {
         message("Variables are continous and categorical, SMOTE_NC could be used.")
-        
+
     } else {
         stop("The types of variables need to be numeric, integer, character or factor.
              Please check your dataset again.")
     }
-    
-    
+
+
     min_cl <- names(table(y))[which.min(table(y))]
     min_ind <- which(y == min_cl)
     maj_ind <- which(y != min_cl)
-    
+
     cont_posi <- which(x_cl == "numeric" | x_cl == "integer")
     cat_posi <- which(x_cl == "factor" | x_cl == "character")
-    
+
     x_min <- data[min_ind, -y_ind]
     x_coln <- colnames(x_min)
-    
+
     x_min_cont <- as.data.frame(x_min[, cont_posi])
     x_min_cat <- as.data.frame(x_min[, cat_posi])
-    
+
     if (length(cont_posi) == 1) {
         sd_cont <- apply(x_min_cont, 2, sd)
     } else {
         sd_cont <- sd(x_min_cont[, 1])
     }
     med <- median(sd_cont)
-    
+
     knn_ind <- NULL
     knn_dist <- NULL
-    
+
     for (i in 1:nrow(x_min)) {
-        
+
         ind <- (1:nrow(x_min))[-i]
-        
+
         if (length(cont_posi) == 1) {
-            dist_cont <- apply(as.array(x_min_cont[-i, ]), 1, function(x) sum((x - x_min_cont[i, 
+            dist_cont <- apply(as.array(x_min_cont[-i, ]), 1, function(x) sum((x - x_min_cont[i,
                 ])^2))
         } else {
             dist_cont <- apply(x_min_cont[-i, ], 1, function(x) sum((x - x_min_cont[i, ])^2))
         }
-        
+
         if (length(cat_posi) == 1) {
-            diff_cat <- length(cat_posi) - apply(as.array(x_min_cat[-i, ]), 1, function(x) sum(x == 
+            diff_cat <- length(cat_posi) - apply(as.array(x_min_cat[-i, ]), 1, function(x) sum(x ==
                 x_min_cat[i, ]))
         } else {
-            diff_cat <- length(cat_posi) - apply(x_min_cat[-i, ], 1, function(x) sum(x == x_min_cat[i, 
+            diff_cat <- length(cat_posi) - apply(x_min_cat[-i, ], 1, function(x) sum(x == x_min_cat[i,
                 ]))
         }
-        
+
         dist_cat <- med^2 * diff_cat
-        
+
         dist <- sqrt(dist_cont + dist_cat)
         dist_ord <- order(dist, decreasing = FALSE)
-        
+
         knn_ind <- rbind(knn_ind, ind[dist_ord[1:k]])
         knn_dist <- rbind(knn_dist, dist[dist_ord[1:k]])
     }
-    
+
     syn_size <- get_syn_size(perc_maj, maj_len = length(maj_ind), min_len = length(min_ind))
-    
+
     new_min <- NULL
     for (i in 1:nrow(x_min)) {
         replacement <- ifelse(syn_size[i] >= k, TRUE, FALSE)
@@ -133,9 +141,9 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
         } else {
             new_cont <- apply(new_cont, 1, function(x) x + x_min_cont[i, ])
         }
-        
+
         new_cont <- as.data.frame(matrix(unlist(new_cont), ncol = ncol(x_min_cont), byrow = TRUE))
-        
+
         cat_knn <- as.data.frame(x_min_cat[knn_ind[i, ], ])
         new_cat <- NULL
         for (j in 1:syn_size[i]) {
@@ -144,20 +152,20 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
             } else {
                 new_cat <- rbind(new_cat, apply(cat_knn, 2, syn_cat))
             }
-            
+
         }
-        
+
         new_contcat <- as.data.frame(cbind(new_cont, new_cat))
         colnames(new_contcat) <- x_coln[c(cont_posi, cat_posi)]
         new_contcat <- new_contcat[, x_coln]
-        
+
         new_min <- rbind(new_min, new_contcat)
     }
-    
+
     new_min[, y_coln] <- min_cl
     new_min <- new_min[, colnames(data)]
     newdata <- rbind(data, new_min)
-    
+
     return(newdata)
-    
+
 }

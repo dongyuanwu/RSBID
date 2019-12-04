@@ -32,7 +32,15 @@
 
 
 SMOTE <- function(data, outcome, perc_maj = 100, k = 5) {
-    
+    if (is.character(outcome)) {
+        if (!(outcome %in% colnames(data))) {
+            stop(paste("This dataset doesn't have a variable names", outcome))
+        }
+    } else {
+        if (outcome < 1 | outcome > ncol(data)) {
+            stop(paste("This dataset doesn't have a variable whose column number is", outcome))
+        }
+    }
     y <- data[, outcome]
     if (class(outcome) == "character") {
         y_coln <- outcome
@@ -41,7 +49,7 @@ SMOTE <- function(data, outcome, perc_maj = 100, k = 5) {
         y_coln <- colnames(data)[outcome]
         y_ind <- outcome
     }
-    
+
     if (length(table(y)) != 2) {
         stop("Sorry, the outcome is not binary, I can't solve this problem :(")
     }
@@ -49,35 +57,35 @@ SMOTE <- function(data, outcome, perc_maj = 100, k = 5) {
         warning("The outcome is a binary variable, but not a factor or character.")
         y <- as.factor(y)
     }
-    
+
     x_cl <- sapply(data[, -y_ind], class)
     if (all(x_cl == "numeric" | x_cl == "integer")) {
         message("All variables are continuous, SMOTE could be used.")
-        
+
     } else if (all(x_cl == "character" | x_cl == "factor")) {
         stop("All variables are categorical, I can't solve this problem :(
              Maybe you can try to make one hot coding for each variable.")
-        
+
     } else if (all(x_cl == "numeric" | x_cl == "integer" | x_cl == "character" | x_cl == "factor")) {
         stop("Variables are continous and categorical, please use SMOTE_NC function.")
-        
+
     } else {
         stop("The types of variables need to be numeric or integer.
              Please check your dataset again.")
     }
-    
+
     min_cl <- names(table(y))[which.min(table(y))]
     min_ind <- which(y == min_cl)
     maj_ind <- which(y != min_cl)
-    
+
     x_min <- data[min_ind, -y_ind]
     x_coln <- colnames(x_min)
     knn_result <- get.knn(x_min, k = k)
     knn_ind <- knn_result$nn.index
     knn_dist <- knn_result$nn.dist
-    
+
     syn_size <- get_syn_size(perc_maj, maj_len = length(maj_ind), min_len = length(min_ind))
-    
+
     new_min <- NULL
     for (i in 1:nrow(x_min)) {
         replacement <- ifelse(syn_size[i] >= k, TRUE, FALSE)
@@ -87,12 +95,12 @@ SMOTE <- function(data, outcome, perc_maj = 100, k = 5) {
         temp <- matrix(unlist(temp), ncol = ncol(x_min), byrow = TRUE)
         new_min <- rbind(new_min, temp)
     }
-    
+
     new_min <- as.data.frame(new_min)
     colnames(new_min) <- x_coln
     new_min[, y_coln] <- min_cl
     new_min <- new_min[, colnames(data)]
     newdata <- rbind(data, new_min)
-    
+
     return(newdata)
 }

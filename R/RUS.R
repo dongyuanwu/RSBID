@@ -24,6 +24,15 @@
 ##' table(newdata2$Class)
 
 RUS <- function(data, outcome, perc_min = 100) {
+    if (is.character(outcome)) {
+        if (!(outcome %in% colnames(data))) {
+            stop(paste("This dataset doesn't have a variable names", outcome))
+        }
+    } else {
+        if (outcome < 1 | outcome > ncol(data)) {
+            stop(paste("This dataset doesn't have a variable whose column number is", outcome))
+        }
+    }
     y <- data[, outcome]
     if (length(table(y)) != 2) {
         stop("Sorry, the outcome is not binary, I can't solve this problem :(")

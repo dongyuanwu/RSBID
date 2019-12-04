@@ -67,6 +67,15 @@
 
 
 SBC <- function(data, outcome, perc_min = 100, k = 3, iter_max = 100, nstart = 1, ...) {
+    if (is.character(outcome)) {
+        if (!(outcome %in% colnames(data))) {
+            stop(paste("This dataset doesn't have a variable names", outcome))
+        }
+    } else {
+        if (outcome < 1 | outcome > ncol(data)) {
+            stop(paste("This dataset doesn't have a variable whose column number is", outcome))
+        }
+    }
     y <- data[, outcome]
     if (class(outcome) == "character") {
         y_coln <- outcome
@@ -75,16 +84,16 @@ SBC <- function(data, outcome, perc_min = 100, k = 3, iter_max = 100, nstart = 1
         y_coln <- colnames(data)[outcome]
         y_ind <- outcome
     }
-    
+
     if (length(table(y)) != 2) {
         stop("Sorry, the outcome is not binary, I can't solve this problem :(")
     }
-    
+
     if (class(y) != "factor" & class(y) != "character") {
         warning("The outcome is a binary variable, but not a factor or character.")
         y <- as.factor(y)
     }
-    
+
     x_cl <- sapply(data[, -y_ind], class)
     if (all(x_cl == "numeric" | x_cl == "integer")) {
         message("All variables are continuous, k-means would be used to cluster.")
@@ -99,21 +108,21 @@ SBC <- function(data, outcome, perc_min = 100, k = 3, iter_max = 100, nstart = 1
         stop("The types of variables need to be numeric, integer, character or factor.
              Please check your dataset again.")
     }
-    
+
     min_cl <- names(table(y))[which.min(table(y))]
     min_ind <- which(y == min_cl)
     maj_ind_orig <- which(y != min_cl)
     cl_result <- as.factor(cl_result)
     maj_cluster <- cl_result[maj_ind_orig]
     min_cluster <- cl_result[min_ind]
-    
+
     ratios <- table(maj_cluster)/table(min_cluster)
     ratios[ratios == Inf] <- table(maj_cluster)[ratios == Inf]
-    
+
     m <- perc_min/100
     ssize_percl <- round((m * length(min_ind)) * (ratios/sum(ratios)))
-    
-    
+
+
     maj_ind_new <- vector(mode = "list", length = k)
     for (i in 1:k) {
         if (ssize_percl[i] > sum(maj_cluster == i)) {
@@ -121,7 +130,7 @@ SBC <- function(data, outcome, perc_min = 100, k = 3, iter_max = 100, nstart = 1
         } else replacement <- FALSE
         maj_ind_new[[i]] <- sample(maj_ind_orig[maj_cluster == i], ssize_percl[i], replace = replacement)
     }
-    
+
     if (sum(ssize_percl) < (m * length(min_ind))) {
         more_maj_num <- m * length(min_ind) - sum(ssize_percl)
         more_maj_ind <- sample(maj_ind_orig, more_maj_num, replace = FALSE)
@@ -129,8 +138,8 @@ SBC <- function(data, outcome, perc_min = 100, k = 3, iter_max = 100, nstart = 1
     } else {
         maj_ind <- sample(unlist(maj_ind_new), m * length(min_ind), replace = FALSE)
     }
-    
-    
+
+
     newdata <- data[c(min_ind, maj_ind), ]
     return(newdata)
 }
