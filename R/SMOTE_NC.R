@@ -23,6 +23,8 @@
 ##' intelligence research}, 16, 321-357.
 ##' @import stats
 ##' @export
+##' @useDynLib RSBID
+##' @importFrom Rcpp sourceCpp
 ##' @examples
 ##' data(abalone)
 ##' table(abalone$Class)
@@ -102,14 +104,12 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
     knn_dist <- NULL
 
     for (i in 1:nrow(x_min)) {
-
         ind <- (1:nrow(x_min))[-i]
 
         if (length(cont_posi) == 1) {
-            dist_cont <- apply(as.array(x_min_cont[-i, ]), 1, function(x) sum((x - x_min_cont[i,
-                ])^2))
+            dist_cont <- apply(as.array(x_min_cont[-i, ]), 1, function(x) get_dist(as.matrix(x, nrow=1), as.matrix(x_min_cont[i, ], nrow=1)))
         } else {
-            dist_cont <- apply(x_min_cont[-i, ], 1, function(x) sum((x - x_min_cont[i, ])^2))
+            dist_cont <- apply(x_min_cont[-i, ], 1, function(x) get_dist(as.matrix(x, nrow=1), as.matrix(x_min_cont[i, ], nrow=1)))
         }
 
         if (length(cat_posi) == 1) {
@@ -135,6 +135,7 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
     for (i in 1:nrow(x_min)) {
         replacement <- ifelse(syn_size[i] >= k, TRUE, FALSE)
         ind <- sample(knn_ind[i, ], syn_size[i], replace = replacement)
+        if (syn_size[i] == 0) next
         new_cont <- runif(syn_size[i], 0, 1) * x_min_cont[ind, ]
         if (length(cont_posi) == 1) {
             new_cont <- apply(as.array(new_cont), 1, function(x) x + x_min_cont[i, ])
