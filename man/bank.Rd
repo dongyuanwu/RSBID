@@ -14,7 +14,7 @@
   \item{day}{last contact of the month (numeric)}
   \item{duration}{last contact duration, in seconds (numeric)}
   \item{campaign}{number of contacts performed during this campaign and for this client (numeric, includes last contact)}
-  \item{pdays}{number of days that passed by after the client was last contacted from a previous campaign (numeric; -1 means client was not previously contacted)}
+  \item{pdays}{number of days that passed by after the client was last contacted from a previous campaign (numeric; 999 means client was not previously contacted)}
   \item{previous}{number of contacts performed before this campaign and for this client (numeric)}
   \item{deposit}{has the client subscribed a term deposit? (binary: 'yes','no')}
   ...
