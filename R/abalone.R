@@ -3,9 +3,8 @@
 #' A imbalanced version of the Abalone data set, where the possitive examples
 #' belong to class 18 and the negative examples belong to class 9.
 #'
-#' @format A data frame with 731 rows and 9 variables:
+#' @format A data frame with 731 rows and 8 variables:
 #' \describe{
-#'   \item{Sex}{Nominal {M, F, I}}
 #'   \item{Length}{Real [0.075, 0.815]}
 #'   \item{Diameter}{Real [0.055, 0.65]}
 #'   \item{Height}{Real [0.0, 1.13]}

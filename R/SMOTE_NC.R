@@ -26,14 +26,14 @@
 ##' @useDynLib RSBID
 ##' @importFrom Rcpp sourceCpp
 ##' @examples
-##' data(abalone)
-##' table(abalone$Class)
+##' data(bank)
+##' table(bank$deposit)
 ##'
-##' newdata1 <- SMOTE_NC(abalone, 'Class')
-##' table(newdata1$Class)
+##' newdata1 <- SMOTE_NC(bank, 'deposit')
+##' table(newdata1$deposit)
 ##'
-##' newdata2 <- SMOTE_NC(abalone, 'Class', perc_maj=50)
-##' table(newdata2$Class)
+##' newdata2 <- SMOTE_NC(bank, 'deposit', perc_maj=50)
+##' table(newdata2$deposit)
 
 
 SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {

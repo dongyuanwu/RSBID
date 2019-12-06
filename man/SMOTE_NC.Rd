@@ -35,14 +35,14 @@ handle mixed datasets of continuous and nominal features, but it could not
 handle datasets with all nominal features or all continuous features.
 }
 \examples{
-data(abalone)
-table(abalone$Class)
+data(bank)
+table(bank$deposit)
 
-newdata1 <- SMOTE_NC(abalone, 'Class')
-table(newdata1$Class)
+newdata1 <- SMOTE_NC(bank, 'deposit')
+table(newdata1$deposit)
 
-newdata2 <- SMOTE_NC(abalone, 'Class', perc_maj=50)
-table(newdata2$Class)
+newdata2 <- SMOTE_NC(bank, 'deposit', perc_maj=50)
+table(newdata2$deposit)
 }
 \references{
 Chawla, N. V., Bowyer, K. W., Hall, L. O., & Kegelmeyer, W. P. (2002).

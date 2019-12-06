@@ -34,10 +34,10 @@ more balanced dataset.
 data(abalone)
 table(abalone$Class)
 
-newdata1 <- SMOTE(abalone[, -1], 'Class')
+newdata1 <- SMOTE(abalone, 'Class')
 table(newdata1$Class)
 
-newdata2 <- SMOTE(abalone[, -1], 'Class', perc_maj=50)
+newdata2 <- SMOTE(abalone, 'Class', perc_maj=50)
 table(newdata2$Class)
 }
 \references{

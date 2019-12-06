@@ -45,24 +45,25 @@
 ##' @export
 ##' @examples
 ##' data(abalone)
+##' data(bank)
 ##' table(abalone$Class)
+##' table(bank$deposit)
 ##'
 ##'# predictors are continuous or categorical
-##' newdata1 <- SBC(abalone, 'Class')
-##' table(newdata1$Class)
+##' newdata1 <- SBC(bank, 'deposit')
+##' table(newdata1$deposit)
 ##'
-##' newdata2 <- SBC(abalone, 'Class', perc_min=200)
-##' table(newdata2$Class)
+##' newdata2 <- SBC(bank, 'deposit', perc_min=200)
+##' table(newdata2$deposit)
 ##'
 ##' # predictors are all continuous
-##' newdata3 <- SBC(abalone[, -1], 'Class')
+##' newdata3 <- SBC(abalone, 'Class')
 ##' table(newdata3$Class)
 ##'
 ##' # predictors are all categorical
-##' abalone1 <- abalone
-##' abalone1[, 2:8] <- apply(abalone1[, 2:8], 2, function(x) ifelse(x > 0.5, 'high', 'low'))
-##' newdata4 <- SBC(abalone1, 'Class')
-##' table(newdata4$Class)
+##' bank1 <- bank[, c(2, 3, 5, 11)]
+##' newdata4 <- SBC(bank1, 'deposit')
+##' table(newdata4$deposit)
 
 
 

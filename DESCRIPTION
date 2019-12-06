@@ -29,9 +29,9 @@ Suggests:
     knitr,
     rmarkdown,
 	randomForest,
-	pROC,
+	e1071,
 	caret
-VignetteBuilder: knitr, randomForest, pROC, caret
+VignetteBuilder: knitr, randomForest, e1071, caret
 LinkingTo: 
     Rcpp
 Imports: 
