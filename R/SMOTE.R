@@ -66,7 +66,7 @@ SMOTE <- function(data, outcome, perc_maj = 100, k = 5) {
         stop("All variables are categorical, I can't solve this problem :(
              Maybe you can try to make one hot coding for each variable.")
 
-    } else if (all(x_cl == "numeric" | x_cl == "integer" | x_cl == "character" | x_cl == "factor")) {
+    } else if ((("character" %in% x_cl) | ("factor" %in% x_cl)) & (("numeric" %in% x_cl) | ("integer" %in% x_cl))) {
         stop("Variables are continous and categorical, please use SMOTE_NC function.")
 
     } else {
