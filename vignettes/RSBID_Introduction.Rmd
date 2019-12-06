@@ -94,7 +94,7 @@ perf_sbc <- display(pred_class, abalone_test$Class, "positive")
 knitr::kable(perf_sbc, row.names=FALSE)
 ```
 
-This time the classifier greatly predict most of the minority samples in testing set, so the sensitivity is 0.625. In the mean time, the specificity is 0.7664, which means this classifier can also correctly classify most of the majority samples. The improvement of performance is significant!
+This time the classifier greatly predict most of the minority samples in testing set, so the sensitivity is `r round(perf_sbc[1, 2], 4)`. In the mean time, the specificity is `r round(perf_sbc[1, 3], 4)`, which means this classifier can also correctly classify most of the majority samples. The improvement of performance is significant!
 
 ## 4 Comparison among Four Resampling Strategies
 
@@ -146,7 +146,7 @@ In the outcome *deposit*, "yes" means that the clients have subscribed a term de
 
 We would like to find the difference between these two kinds of desired targets. Therefore, a good performance of a classifier to classify them correctly is expected.
 
-First of all, we need to separate this dataset into a training set and a testing set. 0.8 would be used as the cutoff.
+First of all, we need to separate this dataset into a training set and a testing set. 0.7 would be used as the cutoff.
 
 ```{r}
 set.seed(2019)
