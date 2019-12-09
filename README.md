@@ -4,7 +4,7 @@ This package contains functions of resampling strategies to make the binary imba
 
 ## Installation
 
-`RSBID` is only available on the github now.
+`RSBID` is available on the github now.
 
 ```{r}
 # install.packages("devtools")
@@ -18,11 +18,15 @@ devtools::install_github("dongyuanwu/RSBID", build_vignettes=TRUE)  # If you wou
 
 ### Over-sampling
 
-- Random Over-Sampling Algorithm (ROS)
-- Synthetic Minority Over-sampling TEchnique (SMOTE)
-- Synthetic Minority Over-sampling TEchnique-Nominal Continuous (SMOTE-NC)
+- Random Over-Sampling Algorithm (`ROS`)
+- Synthetic Minority Over-sampling TEchnique (`SMOTE`)
+- Synthetic Minority Over-sampling TEchnique-Nominal Continuous (`SMOTE_NC`)
 
 ### Under-sampling
 
-- Random Under-Sampling Algorithm (RUS)
-- Under-Sampling Based on Clustering Algorithm (SBC)
+- Random Under-Sampling Algorithm (`RUS`)
+- Under-Sampling Based on Clustering Algorithm (`SBC`)
+
+## ShinyApp
+
+We also have an online shiny app: https://dongyuanwu.shinyapps.io/RSBID
