@@ -68,6 +68,10 @@
 
 
 SBC <- function(data, outcome, perc_min = 100, k = 3, iter_max = 100, nstart = 1, ...) {
+    datnrow <- nrow(data)
+    if (nrow(na.omit(data)) < datnrow) {
+        stop("Sorry, this dataset has missing value :(")
+    }
     if (is.character(outcome)) {
         if (!(outcome %in% colnames(data))) {
             stop(paste("This dataset doesn't have a variable names", outcome))
@@ -89,7 +93,9 @@ SBC <- function(data, outcome, perc_min = 100, k = 3, iter_max = 100, nstart = 1
     if (length(table(y)) != 2) {
         stop("Sorry, the outcome is not binary, I can't solve this problem :(")
     }
-
+    if (table(y)[1] == table(y)[2]) {
+        stop("Sorry, this dataset has been balanced and there is nothing I can do.")
+    }
     if (class(y) != "factor" & class(y) != "character") {
         warning("The outcome is a binary variable, but not a factor or character.")
         y <- as.factor(y)

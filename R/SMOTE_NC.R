@@ -37,6 +37,10 @@
 
 
 SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
+    datnrow <- nrow(data)
+    if (nrow(na.omit(data)) < datnrow) {
+        stop("Sorry, this dataset has missing value :(")
+    }
     if (is.character(outcome)) {
         if (!(outcome %in% colnames(data))) {
             stop(paste("This dataset doesn't have a variable names", outcome))
@@ -57,6 +61,9 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
 
     if (length(table(y)) != 2) {
         stop("Sorry, the outcome is not binary, I can't solve this problem :(")
+    }
+    if (table(y)[1] == table(y)[2]) {
+        stop("Sorry, this dataset has been balanced and there is nothing I can do.")
     }
     if (class(y) != "factor" & class(y) != "character") {
         warning("The outcome is not a factor or character.")
@@ -113,11 +120,9 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
         }
 
         if (length(cat_posi) == 1) {
-            diff_cat <- length(cat_posi) - apply(as.array(x_min_cat[-i, ]), 1, function(x) sum(x ==
-                x_min_cat[i, ]))
+            diff_cat <- length(cat_posi) - apply(as.array(x_min_cat[-i, ]), 1, function(x) sum(x == x_min_cat[i, ]))
         } else {
-            diff_cat <- length(cat_posi) - apply(x_min_cat[-i, ], 1, function(x) sum(x == x_min_cat[i,
-                ]))
+            diff_cat <- length(cat_posi) - apply(x_min_cat[-i, ], 1, function(x) sum(x == x_min_cat[i, ]))
         }
 
         dist_cat <- med^2 * diff_cat
