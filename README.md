@@ -29,4 +29,4 @@ devtools::install_github("dongyuanwu/RSBID", build_vignettes=TRUE)  # If you wou
 
 ## ShinyApp
 
-We also have an online shiny app: https://dongyuanwu.shinyapps.io/RSBID
+We also have an online <a href="https://dongyuanwu.shinyapps.io/RSBID" target="_blank">ShinyApp</a>.
