@@ -19,7 +19,7 @@ Authors@R: c(
            role = "aut",
            email = "peiweiliu@ufl.edu")
 	)
-Description: This package contains functions of resampling strategies to make the binary imbalanced datasets be more balanced. It is important for an imbalanced datasets before applying a classification algorithm, for the reason that class imbalance will lead to a bad performance of classifiers. 
+Description: This package contains functions of resampling strategies to make the binary imbalanced datasets be more balanced. It is important for an imbalanced dataset before applying a classification algorithm, for the reason that class imbalance will lead to a bad performance of classifiers. 
 Depends: R (>= 3.6.0), stats, FNN, clustMixType, klaR
 License: GPL (>= 2)
 Encoding: UTF-8
