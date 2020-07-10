@@ -2,11 +2,13 @@
 
 This package contains functions of resampling strategies to make the binary imbalanced datasets be more balanced. It is important for an imbalanced dataset before applying a classification algorithm, for the reason that class imbalance will lead to a bad performance of classifiers. 
 
+![]()
+
 ## Installation
 
 `RSBID` is available on the github now.
 
-```{r}
+```
 # install.packages("devtools")
 devtools::install_github("dongyuanwu/RSBID")
 devtools::install_github("dongyuanwu/RSBID", build_vignettes=TRUE)  # If you would like to view the vignettes
