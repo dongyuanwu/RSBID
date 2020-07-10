@@ -2,7 +2,9 @@
 
 This package contains functions of resampling strategies to make the binary imbalanced datasets be more balanced. It is important for an imbalanced dataset before applying a classification algorithm, for the reason that class imbalance will lead to a bad performance of classifiers. 
 
- <img src="fig.jpg" width = "300" align=center />
+<div  align="center">
+ <img src="fig.jpg" width = "500"/>
+</div>
 
 ## Installation
 
