@@ -100,11 +100,7 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
     x_min_cont <- as.data.frame(x_min[, cont_posi])
     x_min_cat <- as.data.frame(x_min[, cat_posi])
 
-    if (length(cont_posi) == 1) {
-        sd_cont <- apply(x_min_cont, 2, sd)
-    } else {
-        sd_cont <- sd(x_min_cont[, 1])
-    }
+    sd_cont <- apply(x_min_cont, 2, sd)
     med <- median(sd_cont)
 
     knn_ind <- NULL
@@ -120,9 +116,9 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
         }
 
         if (length(cat_posi) == 1) {
-            diff_cat <- length(cat_posi) - apply(as.array(x_min_cat[-i, ]), 1, function(x) sum(x == x_min_cat[i, ]))
+            diff_cat <- apply(as.array(x_min_cat[-i, ]), 1, function(x) sum(x != x_min_cat[i, ]))
         } else {
-            diff_cat <- length(cat_posi) - apply(x_min_cat[-i, ], 1, function(x) sum(x == x_min_cat[i, ]))
+            diff_cat <- apply(x_min_cat[-i, ], 1, function(x) sum(x != x_min_cat[i, ]))
         }
 
         dist_cat <- med^2 * diff_cat

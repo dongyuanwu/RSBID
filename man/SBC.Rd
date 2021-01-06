@@ -4,8 +4,7 @@
 \alias{SBC}
 \title{Under-Sampling Based on Clustering Algorithm}
 \usage{
-SBC(data, outcome, perc_min = 100, k = 3, iter_max = 100,
-  nstart = 1, ...)
+SBC(data, outcome, perc_min = 100, k = 3, iter_max = 100, nstart = 1, ...)
 }
 \arguments{
 \item{data}{A dataset containing the predictors and the outcome. The predictors

@@ -4,7 +4,8 @@
 \name{abalone}
 \alias{abalone}
 \title{Imbalanced binary abalone dataset}
-\format{A data frame with 731 rows and 8 variables:
+\format{
+A data frame with 731 rows and 8 variables:
 \describe{
   \item{Length}{Real [0.075, 0.815]}
   \item{Diameter}{Real [0.055, 0.65]}
@@ -15,7 +16,8 @@
   \item{Shell_weight}{Real [0.0015, 1.005]}
   \item{Class}{Nominal {positive, negative}}
   ...
-}}
+}
+}
 \source{
 \url{KEEL}{https://sci2s.ugr.es/keel/datasets.php}
 }

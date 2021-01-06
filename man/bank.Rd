@@ -4,7 +4,8 @@
 \name{bank}
 \alias{bank}
 \title{Imbalanced binary bank dataset}
-\format{A data frame with 877 rows and 11 variables:
+\format{
+A data frame with 877 rows and 11 variables:
 \describe{
   \item{age}{age of clients}
   \item{marital}{marital status (categorical: 'divorced','married','single'; note: 'divorced' means divorced or widowed)}
@@ -18,7 +19,8 @@
   \item{previous}{number of contacts performed before this campaign and for this client (numeric)}
   \item{deposit}{has the client subscribed a term deposit? (binary: 'yes','no')}
   ...
-}}
+}
+}
 \source{
 \url{UCI}{https://archive.ics.uci.edu/ml/datasets/Bank+Marketing}
 }
