@@ -137,11 +137,10 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
         replacement <- ifelse(syn_size[i] >= k, TRUE, FALSE)
         ind <- sample(knn_ind[i, ], syn_size[i], replace = replacement)
         if (syn_size[i] == 0) next
-        new_cont <- runif(syn_size[i], 0, 1) * c(x_min_cont[ind, ]-x_min_cont[i, ])
         if (length(cont_posi) == 1) {
-            new_cont <- apply(as.array(new_cont), 1, function(x) x + x_min_cont[i, ])
+            new_cont <- x_min_cont[i, ] + runif(syn_size[i], 0, 1) * (x_min_cont[ind, ]-x_min_cont[i, ])
         } else {
-            new_cont <- apply(new_cont, 1, function(x) x + x_min_cont[i, ])
+            new_cont <- apply(x_min_cont[ind, ], 1, function(x) x_min_cont[i, ] + runif(syn_size[i], 0, 1) * (x-x_min_cont[i, ]))
         }
 
         new_cont <- as.data.frame(matrix(unlist(new_cont), ncol = ncol(x_min_cont), byrow = TRUE))
