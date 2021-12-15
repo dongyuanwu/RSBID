@@ -5,21 +5,39 @@
 
 using namespace Rcpp;
 
-// get_dist
-double get_dist(NumericVector x, NumericVector y);
-RcppExport SEXP _RSBID_get_dist(SEXP xSEXP, SEXP ySEXP) {
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
+// get_dist_cat
+NumericVector get_dist_cat(CharacterVector x, CharacterMatrix y);
+RcppExport SEXP _RSBID_get_dist_cat(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< CharacterMatrix >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(get_dist_cat(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_dist_cont
+NumericVector get_dist_cont(NumericVector x, NumericMatrix y);
+RcppExport SEXP _RSBID_get_dist_cont(SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(get_dist(x, y));
+    Rcpp::traits::input_parameter< NumericMatrix >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(get_dist_cont(x, y));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_RSBID_get_dist", (DL_FUNC) &_RSBID_get_dist, 2},
+    {"_RSBID_get_dist_cat", (DL_FUNC) &_RSBID_get_dist_cat, 2},
+    {"_RSBID_get_dist_cont", (DL_FUNC) &_RSBID_get_dist_cont, 2},
     {NULL, NULL, 0}
 };
 

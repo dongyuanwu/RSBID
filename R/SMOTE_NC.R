@@ -103,49 +103,40 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
     sd_cont <- apply(x_min_cont, 2, sd)
     med <- median(sd_cont)
 
-    knn_ind <- NULL
-    knn_dist <- NULL
+    new_min <- NULL
+
+    syn_size <- get_syn_size(perc_maj, maj_len = length(maj_ind), min_len = length(min_ind))
 
     for (i in 1:nrow(x_min)) {
+
         ind <- (1:nrow(x_min))[-i]
 
-        if (length(cont_posi) == 1) {
-            dist_cont <- apply(as.array(x_min_cont[-i, ]), 1, function(x) get_dist(as.matrix(x, nrow=1), as.matrix(x_min_cont[i, ], nrow=1)))
-        } else {
-            dist_cont <- apply(x_min_cont[-i, ], 1, function(x) get_dist(as.matrix(x, nrow=1), as.matrix(x_min_cont[i, ], nrow=1)))
-        }
+        dist_cont <- get_dist_cont(as.matrix(x_min_cont[i, ], nrow = 1), as.matrix(x_min_cont[-i, ]))
 
-        if (length(cat_posi) == 1) {
-            diff_cat <- apply(as.array(x_min_cat[-i, ]), 1, function(x) sum(x != x_min_cat[i, ]))
-        } else {
-            diff_cat <- apply(x_min_cat[-i, ], 1, function(x) sum(x != x_min_cat[i, ]))
-        }
+        diff_cat <- get_dist_cat(as.matrix(x_min_cat[i, ], nrow = 1), as.matrix(x_min_cat[-i, ]))
 
         dist_cat <- med^2 * diff_cat
 
         dist <- sqrt(dist_cont + dist_cat)
         dist_ord <- order(dist, decreasing = FALSE)
 
-        knn_ind <- rbind(knn_ind, ind[dist_ord[1:k]])
-        knn_dist <- rbind(knn_dist, dist[dist_ord[1:k]])
-    }
+        knn_ind <- ind[dist_ord[1:k]]
+        # knn_dist <- dist[dist_ord[1:k]]
 
-    syn_size <- get_syn_size(perc_maj, maj_len = length(maj_ind), min_len = length(min_ind))
 
-    new_min <- NULL
-    for (i in 1:nrow(x_min)) {
         replacement <- ifelse(syn_size[i] >= k, TRUE, FALSE)
-        ind <- sample(knn_ind[i, ], syn_size[i], replace = replacement)
-        if (syn_size[i] == 0) next
+        ind <- sample(knn_ind, syn_size[i], replace = replacement)
+        if (syn_size[i] == 0) 
+            next
         if (length(cont_posi) == 1) {
-            new_cont <- x_min_cont[i, ] + runif(syn_size[i], 0, 1) * (x_min_cont[ind, ]-x_min_cont[i, ])
+            new_cont <- x_min_cont[i, ] + runif(syn_size[i], 0, 1) * (x_min_cont[ind, ] - x_min_cont[i, ])
         } else {
-            new_cont <- apply(x_min_cont[ind, ], 1, function(x) x_min_cont[i, ] + runif(syn_size[i], 0, 1) * (x-x_min_cont[i, ]))
+            new_cont <- apply(x_min_cont[ind, ], 1, function(x) x_min_cont[i, ] + runif(syn_size[i], 0, 1) * (x - x_min_cont[i, ]))
         }
 
         new_cont <- as.data.frame(matrix(unlist(new_cont), ncol = ncol(x_min_cont), byrow = TRUE))
 
-        cat_knn <- as.data.frame(x_min_cat[knn_ind[i, ], ])
+        cat_knn <- as.data.frame(x_min_cat[knn_ind, ])
         new_cat <- NULL
         for (j in 1:syn_size[i]) {
             if (length(cat_posi) == 1) {
@@ -161,6 +152,8 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
         new_contcat <- new_contcat[, x_coln]
 
         new_min <- rbind(new_min, new_contcat)
+
+
     }
 
     new_min[, y_coln] <- min_cl

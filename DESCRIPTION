@@ -1,6 +1,6 @@
 Package: RSBID
 Title: Resampling Strategies for Binary Imbalanced Datasets 
-Version: 0.0.0.9000
+Version: 0.0.1.0000
 Authors@R: c(
     person(given = "Dongyuan",
            family = "Wu",
@@ -16,11 +16,13 @@ RoxygenNote: 7.1.1
 Suggests: 
     knitr,
     rmarkdown,
-	randomForest,
-	e1071,
-	caret
-VignetteBuilder: knitr, randomForest, e1071, caret
+    randomForest,
+    e1071,
+    caret,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
 LinkingTo: 
     Rcpp
 Imports: 
     Rcpp
+Config/testthat/edition: 3

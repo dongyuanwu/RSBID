@@ -97,8 +97,9 @@ SMOTE <- function(data, outcome, perc_maj = 100, k = 5) {
     for (i in 1:nrow(x_min)) {
         replacement <- ifelse(syn_size[i] >= k, TRUE, FALSE)
         ind <- sample(knn_ind[i, ], syn_size[i], replace = replacement)
-        if (syn_size[i] == 0) next
-        temp <- apply(x_min[ind, ], 1, function(x) x_min[i, ] + runif(syn_size[i], 0, 1) * (x-x_min[i, ]))
+        if (syn_size[i] == 0) 
+            next
+        temp <- apply(x_min[ind, ], 1, function(x) x_min[i, ] + runif(syn_size[i], 0, 1) * (x - x_min[i, ]))
         temp <- matrix(unlist(temp), ncol = ncol(x_min), byrow = TRUE)
         new_min <- rbind(new_min, temp)
     }

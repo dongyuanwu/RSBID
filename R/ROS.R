@@ -51,8 +51,7 @@ ROS <- function(data, outcome, perc_maj = 100) {
     maj_cl <- names(table(y))[which.max(table(y))]
     maj_ind <- which(y == maj_cl)
     min_ind_ori <- which(y != maj_cl)
-    min_ind <- c(min_ind_ori, sample(min_ind_ori, length(maj_ind) * perc_maj/100 - length(min_ind_ori),
-        replace = TRUE))
+    min_ind <- c(min_ind_ori, sample(min_ind_ori, length(maj_ind) * perc_maj/100 - length(min_ind_ori), replace = TRUE))
     newdata <- data[c(min_ind, maj_ind), ]
     return(newdata)
 }

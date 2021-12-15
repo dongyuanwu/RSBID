@@ -20,7 +20,6 @@ The **RSBID** (short for Resampling Strategies for Binary Imbalanced Dadasets) p
 
 ```{r setup}
 library(RSBID)
-
 # prepare for the display of classification performance 
 display <- function(prediction, reference, positiveclass) {
     cm <- caret::confusionMatrix(data=prediction, reference=reference,
@@ -107,18 +106,15 @@ set.seed(2019)
 train_ros <- ROS(abalone_train, "Class")
 train_rus <- RUS(abalone_train, "Class")
 train_smote <- SMOTE(abalone_train, "Class")
-
 fit_ros <- randomForest::randomForest(Class ~ ., data=train_ros)
 fit_rus <- randomForest::randomForest(Class ~ ., data=train_rus)
 fit_smote <- randomForest::randomForest(Class ~ ., data=train_smote)
-
 pred_class_ros <- predict(fit_ros, abalone_test, type="response")
 perf_ros <- display(pred_class_ros, abalone_test$Class, "positive")  
 pred_class_rus <- predict(fit_rus, abalone_test, type="response")
 perf_rus <- display(pred_class_rus, abalone_test$Class, "positive")
 pred_class_smote <- predict(fit_smote, abalone_test, type="response")
 perf_smote <- display(pred_class_smote, abalone_test$Class, "positive")
-
 output <- rbind(perf_orig, perf_ros, perf_rus, perf_sbc, perf_smote)
 rownames(output) <- c("Imbalanced", "Balanced by ROS", "Balanced by RUS",
                       "Balanced by SBC", "Balanced by SMOTE")
@@ -168,7 +164,6 @@ fit_orig <- e1071::svm(deposit ~ ., data = bank_train, kernel = "radial",
 pred_class <- predict(fit_orig, bank_test)
 perf_orig <- display(pred_class, bank_test$deposit, positive="yes")
 knitr::kable(perf_orig, row.names=FALSE)
-
 ```
 
 According to the result, the accuracy of this model is realy high. But all examples with "yes" (i.e., the minority samples) were classified incorrectly so that sensitivity is 0. This performance is very bad. There is a large space to improve it.
@@ -181,12 +176,10 @@ train_ros <- ROS(bank_train, "deposit")
 train_rus <- RUS(bank_train, "deposit")
 train_sbc <- SBC(bank_train, "deposit")
 train_smotenc <- SMOTE_NC(bank_train, "deposit")
-
 fit_ros <- e1071::svm(deposit ~ ., data=train_ros, kernel="radial", probability=TRUE)
 fit_rus <- e1071::svm(deposit ~ ., data=train_rus, kernel="radial", probability=TRUE)
 fit_sbc <- e1071::svm(deposit ~ ., data=train_sbc, kernel="radial", probability=TRUE)
 fit_smotenc <- e1071::svm(deposit ~ ., data=train_smotenc, kernel="radial", probability=TRUE)
-
 pred_class_ros <- predict(fit_ros, bank_test)
 perf_ros <- display(pred_class_ros, bank_test$deposit, "yes")  
 pred_class_rus <- predict(fit_rus, bank_test)
@@ -195,12 +188,10 @@ pred_class_sbc <- predict(fit_sbc, bank_test)
 perf_sbc <- display(pred_class_sbc, bank_test$deposit, "yes")
 pred_class_smotenc <- predict(fit_smotenc, bank_test)
 perf_smotenc <- display(pred_class_smotenc, bank_test$deposit, "yes")
-
 output <- rbind(perf_orig, perf_ros, perf_rus, perf_sbc, perf_smotenc)
 rownames(output) <- c("Imbalanced", "Balanced by ROS", "Balanced by RUS",
                       "Balanced by SBC", "Balanced by SMOTE-NC")
 knitr::kable(output)
-
 ```
 
 As we can see, all of these four algorithms helped to improve the performance of random forest more or less. On the premise of ensuring a good accuracy of a classifier, the sensitivity, which is highly related to the minority class that we are more concerned, is improved by our resampling strategies.
