@@ -106,6 +106,8 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
     new_min <- NULL
 
     syn_size <- get_syn_size(perc_maj, maj_len = length(maj_ind), min_len = length(min_ind))
+    
+    pb <- txtProgressBar(min=1, max=nrow(x_min), initial=1, style=3)
 
     for (i in 1:nrow(x_min)) {
 
@@ -152,9 +154,12 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
         new_contcat <- new_contcat[, x_coln]
 
         new_min <- rbind(new_min, new_contcat)
+        
+        setTxtProgressBar(pb, i)
 
 
     }
+    close(pb)
 
     new_min[, y_coln] <- min_cl
     new_min <- new_min[, colnames(data)]
