@@ -1,44 +1,75 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
 
-<title>Introduction to the RSBID Package</title>
+<title>RSBID_Introduction</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 
 
-<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -47,9 +78,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -106,6 +137,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
+
 <style type="text/css">body {
 background-color: #fff;
 margin: 1em auto;
@@ -116,9 +148,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -287,7 +316,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -300,70 +330,82 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 
 
-<h1 class="title toc-ignore">Introduction to the RSBID Package</h1>
+<h1 class="title toc-ignore">RSBID_Introduction</h1>
 
 
 
-<p>The <strong>RSBID</strong> (short for Resampling Strategies for Binary Imbalanced Dadasets) package contains functions of resampling strategies to make the binary imbalanced datasets be more balanced. It is important for an imbalanced dataset before applying a classification algorithm, for the reason that class imbalance will lead to a bad performance of classifiers.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(RSBID)</a>
-<a class="sourceLine" id="cb1-2" title="2"></a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="co"># prepare for the display of classification performance </span></a>
-<a class="sourceLine" id="cb1-4" title="4">display &lt;-<span class="st"> </span><span class="cf">function</span>(prediction, reference, positiveclass) {</a>
-<a class="sourceLine" id="cb1-5" title="5">    cm &lt;-<span class="st"> </span>caret<span class="op">::</span><span class="kw">confusionMatrix</span>(<span class="dt">data=</span>prediction, <span class="dt">reference=</span>reference,</a>
-<a class="sourceLine" id="cb1-6" title="6">                                 <span class="dt">mode =</span> <span class="st">&quot;sens_spec&quot;</span>, <span class="dt">positive=</span>positiveclass)</a>
-<a class="sourceLine" id="cb1-7" title="7">    <span class="kw">print</span>(cm<span class="op">$</span>table)</a>
-<a class="sourceLine" id="cb1-8" title="8">    <span class="kw">data.frame</span>(<span class="dt">Accuracy=</span>cm<span class="op">$</span>overall[<span class="dv">1</span>], <span class="dt">Sensitivity=</span>cm<span class="op">$</span>byClass[<span class="dv">1</span>], <span class="dt">Specificity=</span>cm<span class="op">$</span>byClass[<span class="dv">2</span>],</a>
-<a class="sourceLine" id="cb1-9" title="9">               <span class="dt">row.names=</span><span class="ot">NULL</span>)</a>
-<a class="sourceLine" id="cb1-10" title="10">}</a></code></pre></div>
+<p>The <strong>RSBID</strong> (short for Resampling Strategies for
+Binary Imbalanced Dadasets) package contains functions of resampling
+strategies to make the binary imbalanced datasets be more balanced. It
+is important for an imbalanced dataset before applying a classification
+algorithm, for the reason that class imbalance will lead to a bad
+performance of classifiers.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RSBID)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># prepare for the display of classification performance </span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>display <span class="ot">&lt;-</span> <span class="cf">function</span>(prediction, reference, positiveclass) {</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    cm <span class="ot">&lt;-</span> caret<span class="sc">::</span><span class="fu">confusionMatrix</span>(<span class="at">data=</span>prediction, <span class="at">reference=</span>reference,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">mode =</span> <span class="st">&quot;sens_spec&quot;</span>, <span class="at">positive=</span>positiveclass)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(cm<span class="sc">$</span>table)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">Accuracy=</span>cm<span class="sc">$</span>overall[<span class="dv">1</span>], <span class="at">Sensitivity=</span>cm<span class="sc">$</span>byClass[<span class="dv">1</span>], <span class="at">Specificity=</span>cm<span class="sc">$</span>byClass[<span class="dv">2</span>],</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">row.names=</span><span class="cn">NULL</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <div id="data-import" class="section level2">
 <h2>1 Data Import</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">data</span>(abalone)</a>
-<a class="sourceLine" id="cb2-2" title="2">abalone<span class="op">$</span>Class &lt;-<span class="st"> </span><span class="kw">as.factor</span>(<span class="kw">gsub</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;&quot;</span>, abalone<span class="op">$</span>Class))</a>
-<a class="sourceLine" id="cb2-3" title="3"><span class="kw">str</span>(abalone)</a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="co">#&gt; &#39;data.frame&#39;:    731 obs. of  8 variables:</span></a>
-<a class="sourceLine" id="cb2-5" title="5"><span class="co">#&gt;  $ Length        : num  0.53 0.475 0.45 0.55 0.665 0.355 0.45 0.47 0.525 0.505 ...</span></a>
-<a class="sourceLine" id="cb2-6" title="6"><span class="co">#&gt;  $ Diameter      : num  0.42 0.37 0.32 0.415 0.525 0.29 0.335 0.37 0.425 0.405 ...</span></a>
-<a class="sourceLine" id="cb2-7" title="7"><span class="co">#&gt;  $ Height        : num  0.135 0.125 0.1 0.135 0.165 0.09 0.105 0.12 0.16 0.11 ...</span></a>
-<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt;  $ Whole_weight  : num  0.677 0.509 0.381 0.763 1.338 ...</span></a>
-<a class="sourceLine" id="cb2-9" title="9"><span class="co">#&gt;  $ Shucked_weight: num  0.257 0.216 0.171 0.318 0.551 ...</span></a>
-<a class="sourceLine" id="cb2-10" title="10"><span class="co">#&gt;  $ Viscera_weight: num  0.141 0.112 0.075 0.21 0.357 ...</span></a>
-<a class="sourceLine" id="cb2-11" title="11"><span class="co">#&gt;  $ Shell_weight  : num  0.21 0.165 0.115 0.2 0.35 0.09 0.115 0.14 0.245 0.175 ...</span></a>
-<a class="sourceLine" id="cb2-12" title="12"><span class="co">#&gt;  $ Class         : Factor w/ 2 levels &quot;negative&quot;,&quot;positive&quot;: 1 1 1 1 2 1 1 1 1 1 ...</span></a></code></pre></div>
-<p>The <em>abalone</em> dataset is available in the <strong>RSBID</strong> package. It has 731 observations and 8 variables. In the outcome <em>Class</em>, the possitive examples belong to class 18 and the negative examples belong to class 9. We would like to find the difference between these two kinds of abalone. Therefore, a good performance of a classifier to classify them correctly is expected.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">table</span>(abalone<span class="op">$</span>Class)</a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt; negative positive </span></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt;      689       42</span></a></code></pre></div>
-<p>As we can see, there are 689 negative examples and 42 positive examples. The imbalanced ratio (IR) is about 16.4.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(abalone)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>abalone<span class="sc">$</span>Class <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">gsub</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;&quot;</span>, abalone<span class="sc">$</span>Class))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(abalone)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &#39;data.frame&#39;:    731 obs. of  8 variables:</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ Length        : num  0.53 0.475 0.45 0.55 0.665 0.355 0.45 0.47 0.525 0.505 ...</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ Diameter      : num  0.42 0.37 0.32 0.415 0.525 0.29 0.335 0.37 0.425 0.405 ...</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ Height        : num  0.135 0.125 0.1 0.135 0.165 0.09 0.105 0.12 0.16 0.11 ...</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ Whole_weight  : num  0.677 0.509 0.381 0.763 1.338 ...</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ Shucked_weight: num  0.257 0.216 0.171 0.318 0.551 ...</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ Viscera_weight: num  0.141 0.112 0.075 0.21 0.357 ...</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ Shell_weight  : num  0.21 0.165 0.115 0.2 0.35 0.09 0.115 0.14 0.245 0.175 ...</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ Class         : Factor w/ 2 levels &quot;negative&quot;,&quot;positive&quot;: 1 1 1 1 2 1 1 1 1 1 ...</span></span></code></pre></div>
+<p>The <em>abalone</em> dataset is available in the
+<strong>RSBID</strong> package. It has 731 observations and 8 variables.
+In the outcome <em>Class</em>, the possitive examples belong to class 18
+and the negative examples belong to class 9. We would like to find the
+difference between these two kinds of abalone. Therefore, a good
+performance of a classifier to classify them correctly is expected.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(abalone<span class="sc">$</span>Class)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; negative positive </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      689       42</span></span></code></pre></div>
+<p>As we can see, there are 689 negative examples and 42 positive
+examples. The imbalanced ratio (IR) is about 16.4.</p>
 </div>
 <div id="model-building-for-a-imbalanced-dataset" class="section level2">
 <h2>2 Model Building for a Imbalanced Dataset</h2>
-<p>First of all, we need to separate this dataset into a training set and a testing set. 0.7 would be used as the cutoff.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">set.seed</span>(<span class="dv">2019</span>)</a>
-<a class="sourceLine" id="cb4-2" title="2">inTrain &lt;-<span class="st"> </span>caret<span class="op">::</span><span class="kw">createDataPartition</span>(abalone<span class="op">$</span>Class, <span class="dt">p =</span> <span class="fl">0.7</span>, <span class="dt">list =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb4-3" title="3">abalone_train &lt;-<span class="st"> </span>abalone[inTrain, ]</a>
-<a class="sourceLine" id="cb4-4" title="4">abalone_test &lt;-<span class="st"> </span>abalone[<span class="op">-</span>inTrain, ]</a>
-<a class="sourceLine" id="cb4-5" title="5"><span class="kw">table</span>(abalone_train<span class="op">$</span>Class)</a>
-<a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt; negative positive </span></a>
-<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt;      483       30</span></a>
-<a class="sourceLine" id="cb4-9" title="9"><span class="kw">table</span>(abalone_test<span class="op">$</span>Class)</a>
-<a class="sourceLine" id="cb4-10" title="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-11" title="11"><span class="co">#&gt; negative positive </span></a>
-<a class="sourceLine" id="cb4-12" title="12"><span class="co">#&gt;      206       12</span></a></code></pre></div>
+<p>First of all, we need to separate this dataset into a training set
+and a testing set. 0.7 would be used as the cutoff.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2019</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>inTrain <span class="ot">&lt;-</span> caret<span class="sc">::</span><span class="fu">createDataPartition</span>(abalone<span class="sc">$</span>Class, <span class="at">p =</span> <span class="fl">0.7</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>abalone_train <span class="ot">&lt;-</span> abalone[inTrain, ]</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>abalone_test <span class="ot">&lt;-</span> abalone[<span class="sc">-</span>inTrain, ]</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(abalone_train<span class="sc">$</span>Class)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; negative positive </span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      483       30</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(abalone_test<span class="sc">$</span>Class)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; negative positive </span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      206       12</span></span></code></pre></div>
 <p>The training set and the testing set are both imbalanced.</p>
-<p>Now we apply Random Forests on this imbalanced dataset to check the classification performance.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">set.seed</span>(<span class="dv">2019</span>)</a>
-<a class="sourceLine" id="cb5-2" title="2">fit_orig &lt;-<span class="st"> </span>randomForest<span class="op">::</span><span class="kw">randomForest</span>(Class <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> abalone_train)</a>
-<a class="sourceLine" id="cb5-3" title="3">pred_class &lt;-<span class="st"> </span><span class="kw">predict</span>(fit_orig, abalone_test, <span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb5-4" title="4">(perf_orig &lt;-<span class="st"> </span><span class="kw">display</span>(pred_class, abalone_test<span class="op">$</span>Class, <span class="st">&quot;positive&quot;</span>))</a>
-<a class="sourceLine" id="cb5-5" title="5"><span class="co">#&gt;           Reference</span></a>
-<a class="sourceLine" id="cb5-6" title="6"><span class="co">#&gt; Prediction negative positive</span></a>
-<a class="sourceLine" id="cb5-7" title="7"><span class="co">#&gt;   negative      206       11</span></a>
-<a class="sourceLine" id="cb5-8" title="8"><span class="co">#&gt;   positive        0        1</span></a>
-<a class="sourceLine" id="cb5-9" title="9"><span class="co">#&gt;    Accuracy Sensitivity Specificity</span></a>
-<a class="sourceLine" id="cb5-10" title="10"><span class="co">#&gt; 1 0.9495413  0.08333333           1</span></a>
-<a class="sourceLine" id="cb5-11" title="11">knitr<span class="op">::</span><span class="kw">kable</span>(perf_orig, <span class="dt">row.names=</span><span class="ot">FALSE</span>)</a></code></pre></div>
+<p>Now we apply Random Forests on this imbalanced dataset to check the
+classification performance.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2019</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>fit_orig <span class="ot">&lt;-</span> randomForest<span class="sc">::</span><span class="fu">randomForest</span>(Class <span class="sc">~</span> ., <span class="at">data =</span> abalone_train)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>pred_class <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_orig, abalone_test, <span class="at">type=</span><span class="st">&quot;response&quot;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>(perf_orig <span class="ot">&lt;-</span> <span class="fu">display</span>(pred_class, abalone_test<span class="sc">$</span>Class, <span class="st">&quot;positive&quot;</span>))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           Reference</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prediction negative positive</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   negative      206       11</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   positive        0        1</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    Accuracy Sensitivity Specificity</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 0.9495413  0.08333333           1</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(perf_orig, <span class="at">row.names=</span><span class="cn">FALSE</span>)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -380,27 +422,32 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tr>
 </tbody>
 </table>
-<p>According to the result, the accuracy of this model is actually very high. But all positive examples (i.e., the minority samples) were classified incorrectly so that sensitivity is 0. This performance is very bad actually.</p>
+<p>According to the result, the accuracy of this model is actually very
+high. But all positive examples (i.e., the minority samples) were
+classified incorrectly so that sensitivity is 0. This performance is
+very bad actually.</p>
 </div>
 <div id="model-building-for-a-balanced-dataset" class="section level2">
 <h2>3 Model Building for a Balanced Dataset</h2>
-<p>Now we used the Under-Sampling Based on Clustering (SBC) algorithm as an example to balance the dataset.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">set.seed</span>(<span class="dv">2019</span>)</a>
-<a class="sourceLine" id="cb6-2" title="2">train_sbc &lt;-<span class="st"> </span><span class="kw">SBC</span>(abalone_train, <span class="st">&quot;Class&quot;</span>)</a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="kw">table</span>(train_sbc<span class="op">$</span>Class)</a>
-<a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt; negative positive </span></a>
-<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt;       30       30</span></a></code></pre></div>
-<p>The dataset has been balanced now. Then build a new Random Forest model for this balanced dataset.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">set.seed</span>(<span class="dv">2019</span>)</a>
-<a class="sourceLine" id="cb7-2" title="2">fit_orig &lt;-<span class="st"> </span>randomForest<span class="op">::</span><span class="kw">randomForest</span>(Class <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train_sbc)</a>
-<a class="sourceLine" id="cb7-3" title="3">pred_class &lt;-<span class="st"> </span><span class="kw">predict</span>(fit_orig, abalone_test, <span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb7-4" title="4">perf_sbc &lt;-<span class="st"> </span><span class="kw">display</span>(pred_class, abalone_test<span class="op">$</span>Class, <span class="st">&quot;positive&quot;</span>)</a>
-<a class="sourceLine" id="cb7-5" title="5"><span class="co">#&gt;           Reference</span></a>
-<a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt; Prediction negative positive</span></a>
-<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt;   negative      150        4</span></a>
-<a class="sourceLine" id="cb7-8" title="8"><span class="co">#&gt;   positive       56        8</span></a>
-<a class="sourceLine" id="cb7-9" title="9">knitr<span class="op">::</span><span class="kw">kable</span>(perf_sbc, <span class="dt">row.names=</span><span class="ot">FALSE</span>)</a></code></pre></div>
+<p>Now we used the Under-Sampling Based on Clustering (SBC) algorithm as
+an example to balance the dataset.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2019</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>train_sbc <span class="ot">&lt;-</span> <span class="fu">SBC</span>(abalone_train, <span class="st">&quot;Class&quot;</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(train_sbc<span class="sc">$</span>Class)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; negative positive </span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       30       30</span></span></code></pre></div>
+<p>The dataset has been balanced now. Then build a new Random Forest
+model for this balanced dataset.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2019</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>fit_orig <span class="ot">&lt;-</span> randomForest<span class="sc">::</span><span class="fu">randomForest</span>(Class <span class="sc">~</span> ., <span class="at">data =</span> train_sbc)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>pred_class <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_orig, abalone_test, <span class="at">type=</span><span class="st">&quot;response&quot;</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>perf_sbc <span class="ot">&lt;-</span> <span class="fu">display</span>(pred_class, abalone_test<span class="sc">$</span>Class, <span class="st">&quot;positive&quot;</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           Reference</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prediction negative positive</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   negative      150        4</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   positive       56        8</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(perf_sbc, <span class="at">row.names=</span><span class="cn">FALSE</span>)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -417,48 +464,57 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tr>
 </tbody>
 </table>
-<p>This time the classifier greatly predict most of the minority samples in testing set, so the sensitivity is 0.6667. In the mean time, the specificity is 0.7282, which means this classifier can also correctly classify most of the majority samples. The improvement of performance is significant!</p>
+<p>This time the classifier greatly predict most of the minority samples
+in testing set, so the sensitivity is 0.6667. In the mean time, the
+specificity is 0.7282, which means this classifier can also correctly
+classify most of the majority samples. The improvement of performance is
+significant!</p>
 </div>
 <div id="comparison-among-four-resampling-strategies" class="section level2">
 <h2>4 Comparison among Four Resampling Strategies</h2>
-<p>The <strong>RSBID</strong> package provides several resampling strategies: random over-sampling algorithm (ROS), random under-sampling algorithm (RUS), under-sampling based on clustering algorithm (SBC), and synthetic minority over-sampling technique (SMOTE) and synthetic minority over-sampling technique-Nominal Continuous (SMOTE-NC). For the reason that <em>abalone</em> is a dataset that its all predictors are continuous, ROS, RUS, SBC and SMOTE could be used to balance it.</p>
-<p>The classification performance of Random Forests on four balanced datasets by respectively using these four strategies would be shown below.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">set.seed</span>(<span class="dv">2019</span>)</a>
-<a class="sourceLine" id="cb8-2" title="2">train_ros &lt;-<span class="st"> </span><span class="kw">ROS</span>(abalone_train, <span class="st">&quot;Class&quot;</span>)</a>
-<a class="sourceLine" id="cb8-3" title="3">train_rus &lt;-<span class="st"> </span><span class="kw">RUS</span>(abalone_train, <span class="st">&quot;Class&quot;</span>)</a>
-<a class="sourceLine" id="cb8-4" title="4">train_smote &lt;-<span class="st"> </span><span class="kw">SMOTE</span>(abalone_train, <span class="st">&quot;Class&quot;</span>)</a>
-<a class="sourceLine" id="cb8-5" title="5"></a>
-<a class="sourceLine" id="cb8-6" title="6">fit_ros &lt;-<span class="st"> </span>randomForest<span class="op">::</span><span class="kw">randomForest</span>(Class <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>train_ros)</a>
-<a class="sourceLine" id="cb8-7" title="7">fit_rus &lt;-<span class="st"> </span>randomForest<span class="op">::</span><span class="kw">randomForest</span>(Class <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>train_rus)</a>
-<a class="sourceLine" id="cb8-8" title="8">fit_smote &lt;-<span class="st"> </span>randomForest<span class="op">::</span><span class="kw">randomForest</span>(Class <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>train_smote)</a>
-<a class="sourceLine" id="cb8-9" title="9"></a>
-<a class="sourceLine" id="cb8-10" title="10">pred_class_ros &lt;-<span class="st"> </span><span class="kw">predict</span>(fit_ros, abalone_test, <span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb8-11" title="11">perf_ros &lt;-<span class="st"> </span><span class="kw">display</span>(pred_class_ros, abalone_test<span class="op">$</span>Class, <span class="st">&quot;positive&quot;</span>)  </a>
-<a class="sourceLine" id="cb8-12" title="12"><span class="co">#&gt;           Reference</span></a>
-<a class="sourceLine" id="cb8-13" title="13"><span class="co">#&gt; Prediction negative positive</span></a>
-<a class="sourceLine" id="cb8-14" title="14"><span class="co">#&gt;   negative      204        9</span></a>
-<a class="sourceLine" id="cb8-15" title="15"><span class="co">#&gt;   positive        2        3</span></a>
-<a class="sourceLine" id="cb8-16" title="16">pred_class_rus &lt;-<span class="st"> </span><span class="kw">predict</span>(fit_rus, abalone_test, <span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb8-17" title="17">perf_rus &lt;-<span class="st"> </span><span class="kw">display</span>(pred_class_rus, abalone_test<span class="op">$</span>Class, <span class="st">&quot;positive&quot;</span>)</a>
-<a class="sourceLine" id="cb8-18" title="18"><span class="co">#&gt;           Reference</span></a>
-<a class="sourceLine" id="cb8-19" title="19"><span class="co">#&gt; Prediction negative positive</span></a>
-<a class="sourceLine" id="cb8-20" title="20"><span class="co">#&gt;   negative      148        3</span></a>
-<a class="sourceLine" id="cb8-21" title="21"><span class="co">#&gt;   positive       58        9</span></a>
-<a class="sourceLine" id="cb8-22" title="22">pred_class_smote &lt;-<span class="st"> </span><span class="kw">predict</span>(fit_smote, abalone_test, <span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb8-23" title="23">perf_smote &lt;-<span class="st"> </span><span class="kw">display</span>(pred_class_smote, abalone_test<span class="op">$</span>Class, <span class="st">&quot;positive&quot;</span>)</a>
-<a class="sourceLine" id="cb8-24" title="24"><span class="co">#&gt;           Reference</span></a>
-<a class="sourceLine" id="cb8-25" title="25"><span class="co">#&gt; Prediction negative positive</span></a>
-<a class="sourceLine" id="cb8-26" title="26"><span class="co">#&gt;   negative      200        9</span></a>
-<a class="sourceLine" id="cb8-27" title="27"><span class="co">#&gt;   positive        6        3</span></a>
-<a class="sourceLine" id="cb8-28" title="28"></a>
-<a class="sourceLine" id="cb8-29" title="29">output &lt;-<span class="st"> </span><span class="kw">rbind</span>(perf_orig, perf_ros, perf_rus, perf_sbc, perf_smote)</a>
-<a class="sourceLine" id="cb8-30" title="30"><span class="kw">rownames</span>(output) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Imbalanced&quot;</span>, <span class="st">&quot;Balanced by ROS&quot;</span>, <span class="st">&quot;Balanced by RUS&quot;</span>,</a>
-<a class="sourceLine" id="cb8-31" title="31">                      <span class="st">&quot;Balanced by SBC&quot;</span>, <span class="st">&quot;Balanced by SMOTE&quot;</span>)</a>
-<a class="sourceLine" id="cb8-32" title="32">knitr<span class="op">::</span><span class="kw">kable</span>(output)</a></code></pre></div>
+<p>The <strong>RSBID</strong> package provides several resampling
+strategies: random over-sampling algorithm (ROS), random under-sampling
+algorithm (RUS), under-sampling based on clustering algorithm (SBC), and
+synthetic minority over-sampling technique (SMOTE) and synthetic
+minority over-sampling technique-Nominal Continuous (SMOTE-NC). For the
+reason that <em>abalone</em> is a dataset that its all predictors are
+continuous, ROS, RUS, SBC and SMOTE could be used to balance it.</p>
+<p>The classification performance of Random Forests on four balanced
+datasets by respectively using these four strategies would be shown
+below.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2019</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>train_ros <span class="ot">&lt;-</span> <span class="fu">ROS</span>(abalone_train, <span class="st">&quot;Class&quot;</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>train_rus <span class="ot">&lt;-</span> <span class="fu">RUS</span>(abalone_train, <span class="st">&quot;Class&quot;</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>train_smote <span class="ot">&lt;-</span> <span class="fu">SMOTE</span>(abalone_train, <span class="st">&quot;Class&quot;</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>fit_ros <span class="ot">&lt;-</span> randomForest<span class="sc">::</span><span class="fu">randomForest</span>(Class <span class="sc">~</span> ., <span class="at">data=</span>train_ros)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>fit_rus <span class="ot">&lt;-</span> randomForest<span class="sc">::</span><span class="fu">randomForest</span>(Class <span class="sc">~</span> ., <span class="at">data=</span>train_rus)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>fit_smote <span class="ot">&lt;-</span> randomForest<span class="sc">::</span><span class="fu">randomForest</span>(Class <span class="sc">~</span> ., <span class="at">data=</span>train_smote)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>pred_class_ros <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_ros, abalone_test, <span class="at">type=</span><span class="st">&quot;response&quot;</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>perf_ros <span class="ot">&lt;-</span> <span class="fu">display</span>(pred_class_ros, abalone_test<span class="sc">$</span>Class, <span class="st">&quot;positive&quot;</span>)  </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           Reference</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prediction negative positive</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   negative      204        9</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   positive        2        3</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>pred_class_rus <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_rus, abalone_test, <span class="at">type=</span><span class="st">&quot;response&quot;</span>)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>perf_rus <span class="ot">&lt;-</span> <span class="fu">display</span>(pred_class_rus, abalone_test<span class="sc">$</span>Class, <span class="st">&quot;positive&quot;</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           Reference</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prediction negative positive</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   negative      142        2</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   positive       64       10</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>pred_class_smote <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_smote, abalone_test, <span class="at">type=</span><span class="st">&quot;response&quot;</span>)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>perf_smote <span class="ot">&lt;-</span> <span class="fu">display</span>(pred_class_smote, abalone_test<span class="sc">$</span>Class, <span class="st">&quot;positive&quot;</span>)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           Reference</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prediction negative positive</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   negative      198        8</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   positive        8        4</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> <span class="fu">rbind</span>(perf_orig, perf_ros, perf_rus, perf_sbc, perf_smote)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(output) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Imbalanced&quot;</span>, <span class="st">&quot;Balanced by ROS&quot;</span>, <span class="st">&quot;Balanced by RUS&quot;</span>,</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;Balanced by SBC&quot;</span>, <span class="st">&quot;Balanced by SMOTE&quot;</span>)</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(output)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
-<th></th>
+<th align="left"></th>
 <th align="right">Accuracy</th>
 <th align="right">Sensitivity</th>
 <th align="right">Specificity</th>
@@ -466,88 +522,105 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td>Imbalanced</td>
+<td align="left">Imbalanced</td>
 <td align="right">0.9495413</td>
 <td align="right">0.0833333</td>
 <td align="right">1.0000000</td>
 </tr>
 <tr class="even">
-<td>Balanced by ROS</td>
+<td align="left">Balanced by ROS</td>
 <td align="right">0.9495413</td>
 <td align="right">0.2500000</td>
 <td align="right">0.9902913</td>
 </tr>
 <tr class="odd">
-<td>Balanced by RUS</td>
-<td align="right">0.7201835</td>
-<td align="right">0.7500000</td>
-<td align="right">0.7184466</td>
+<td align="left">Balanced by RUS</td>
+<td align="right">0.6972477</td>
+<td align="right">0.8333333</td>
+<td align="right">0.6893204</td>
 </tr>
 <tr class="even">
-<td>Balanced by SBC</td>
+<td align="left">Balanced by SBC</td>
 <td align="right">0.7247706</td>
 <td align="right">0.6666667</td>
 <td align="right">0.7281553</td>
 </tr>
 <tr class="odd">
-<td>Balanced by SMOTE</td>
-<td align="right">0.9311927</td>
-<td align="right">0.2500000</td>
-<td align="right">0.9708738</td>
+<td align="left">Balanced by SMOTE</td>
+<td align="right">0.9266055</td>
+<td align="right">0.3333333</td>
+<td align="right">0.9611650</td>
 </tr>
 </tbody>
 </table>
-<p>As we can see, all of these four algorithms helped to improve the performance of random forest more or less. On the premise of ensuring a good accuracy of a classifier, the sensitivity, which is highly related to the minority class that we are more concerned, is improved by our resampling strategies.</p>
+<p>As we can see, all of these four algorithms helped to improve the
+performance of random forest more or less. On the premise of ensuring a
+good accuracy of a classifier, the sensitivity, which is highly related
+to the minority class that we are more concerned, is improved by our
+resampling strategies.</p>
 </div>
 <div id="another-quick-example" class="section level2">
 <h2>5 Another Quick Example</h2>
-<p><strong>RSBID</strong> provides another dataset named <em>bank</em> with continuous and categorical predictors.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">data</span>(bank)</a>
-<a class="sourceLine" id="cb9-2" title="2"><span class="kw">str</span>(bank)</a>
-<a class="sourceLine" id="cb9-3" title="3"><span class="co">#&gt; &#39;data.frame&#39;:    904 obs. of  11 variables:</span></a>
-<a class="sourceLine" id="cb9-4" title="4"><span class="co">#&gt;  $ age      : int  35 59 36 37 41 56 59 42 26 32 ...</span></a>
-<a class="sourceLine" id="cb9-5" title="5"><span class="co">#&gt;  $ marital  : Factor w/ 3 levels &quot;divorced&quot;,&quot;married&quot;,..: 3 2 2 3 2 2 2 1 2 3 ...</span></a>
-<a class="sourceLine" id="cb9-6" title="6"><span class="co">#&gt;  $ education: Factor w/ 4 levels &quot;primary&quot;,&quot;secondary&quot;,..: 3 2 3 3 3 2 2 2 1 1 ...</span></a>
-<a class="sourceLine" id="cb9-7" title="7"><span class="co">#&gt;  $ balance  : int  1350 0 1109 2317 5883 784 42 1811 0 -849 ...</span></a>
-<a class="sourceLine" id="cb9-8" title="8"><span class="co">#&gt;  $ housing  : Factor w/ 2 levels &quot;no&quot;,&quot;yes&quot;: 2 2 1 2 1 1 1 2 2 2 ...</span></a>
-<a class="sourceLine" id="cb9-9" title="9"><span class="co">#&gt;  $ day      : int  16 5 13 20 20 30 21 14 21 4 ...</span></a>
-<a class="sourceLine" id="cb9-10" title="10"><span class="co">#&gt;  $ duration : int  185 226 328 114 182 149 40 150 425 204 ...</span></a>
-<a class="sourceLine" id="cb9-11" title="11"><span class="co">#&gt;  $ campaign : int  1 1 2 1 2 2 1 1 1 1 ...</span></a>
-<a class="sourceLine" id="cb9-12" title="12"><span class="co">#&gt;  $ pdays    : num  330 999 999 152 999 999 999 999 999 999 ...</span></a>
-<a class="sourceLine" id="cb9-13" title="13"><span class="co">#&gt;  $ previous : int  1 0 0 2 0 0 0 0 0 0 ...</span></a>
-<a class="sourceLine" id="cb9-14" title="14"><span class="co">#&gt;  $ deposit  : Factor w/ 2 levels &quot;no&quot;,&quot;yes&quot;: 1 1 1 1 1 1 1 1 1 1 ...</span></a></code></pre></div>
-<p>The <em>bank</em> dataset has 904 observations and 11 variables. The data is related with direct marketing campaigns of a Portuguese banking institution. Except the outcome <em>deposit</em>, there are 3 categorical predictors and 7 continuous predictors.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">table</span>(bank<span class="op">$</span>deposit)</a>
-<a class="sourceLine" id="cb10-2" title="2"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-3" title="3"><span class="co">#&gt;  no yes </span></a>
-<a class="sourceLine" id="cb10-4" title="4"><span class="co">#&gt; 800 104</span></a></code></pre></div>
-<p>In the outcome <em>deposit</em>, “yes” means that the clients have subscribed a term deposit while “no” means that the clients have not subscribed a term deposit. There are 800 “no” examples and 104 “yes” examples. The imbalanced ratio (IR) is about 7.69.</p>
-<p>We would like to find the difference between these two kinds of desired targets. Therefore, a good performance of a classifier to classify them correctly is expected.</p>
-<p>First of all, we need to separate this dataset into a training set and a testing set. 0.7 would be used as the cutoff.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">set.seed</span>(<span class="dv">2019</span>)</a>
-<a class="sourceLine" id="cb11-2" title="2">inTrain &lt;-<span class="st"> </span>caret<span class="op">::</span><span class="kw">createDataPartition</span>(bank<span class="op">$</span>deposit, <span class="dt">p =</span> <span class="fl">0.7</span>, <span class="dt">list =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb11-3" title="3">bank_train &lt;-<span class="st"> </span>bank[inTrain, ]</a>
-<a class="sourceLine" id="cb11-4" title="4">bank_test &lt;-<span class="st"> </span>bank[<span class="op">-</span>inTrain, ]</a>
-<a class="sourceLine" id="cb11-5" title="5"><span class="kw">table</span>(bank_train<span class="op">$</span>deposit)</a>
-<a class="sourceLine" id="cb11-6" title="6"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-7" title="7"><span class="co">#&gt;  no yes </span></a>
-<a class="sourceLine" id="cb11-8" title="8"><span class="co">#&gt; 560  73</span></a>
-<a class="sourceLine" id="cb11-9" title="9"><span class="kw">table</span>(bank_test<span class="op">$</span>deposit)</a>
-<a class="sourceLine" id="cb11-10" title="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-11" title="11"><span class="co">#&gt;  no yes </span></a>
-<a class="sourceLine" id="cb11-12" title="12"><span class="co">#&gt; 240  31</span></a></code></pre></div>
-<p>The training set and the testing set are both imbalanced and their IRs are roughly the same as the whole dataset.</p>
-<p>Now we apply Support Vector Machine (SVM) with Gaussian kernel on the imbalanced training set and then predict the deposit status in the testing set to check the classification performance.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">set.seed</span>(<span class="dv">2019</span>)</a>
-<a class="sourceLine" id="cb12-2" title="2">fit_orig &lt;-<span class="st"> </span>e1071<span class="op">::</span><span class="kw">svm</span>(deposit <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> bank_train, <span class="dt">kernel =</span> <span class="st">&quot;radial&quot;</span>,</a>
-<a class="sourceLine" id="cb12-3" title="3">                       <span class="dt">probability=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb12-4" title="4">pred_class &lt;-<span class="st"> </span><span class="kw">predict</span>(fit_orig, bank_test)</a>
-<a class="sourceLine" id="cb12-5" title="5">perf_orig &lt;-<span class="st"> </span><span class="kw">display</span>(pred_class, bank_test<span class="op">$</span>deposit, <span class="dt">positive=</span><span class="st">&quot;yes&quot;</span>)</a>
-<a class="sourceLine" id="cb12-6" title="6"><span class="co">#&gt;           Reference</span></a>
-<a class="sourceLine" id="cb12-7" title="7"><span class="co">#&gt; Prediction  no yes</span></a>
-<a class="sourceLine" id="cb12-8" title="8"><span class="co">#&gt;        no  236  31</span></a>
-<a class="sourceLine" id="cb12-9" title="9"><span class="co">#&gt;        yes   4   0</span></a>
-<a class="sourceLine" id="cb12-10" title="10">knitr<span class="op">::</span><span class="kw">kable</span>(perf_orig, <span class="dt">row.names=</span><span class="ot">FALSE</span>)</a></code></pre></div>
+<p><strong>RSBID</strong> provides another dataset named <em>bank</em>
+with continuous and categorical predictors.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(bank)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(bank)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &#39;data.frame&#39;:    904 obs. of  11 variables:</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ age      : int  35 59 36 37 41 56 59 42 26 32 ...</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ marital  : Factor w/ 3 levels &quot;divorced&quot;,&quot;married&quot;,..: 3 2 2 3 2 2 2 1 2 3 ...</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ education: Factor w/ 4 levels &quot;primary&quot;,&quot;secondary&quot;,..: 3 2 3 3 3 2 2 2 1 1 ...</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ balance  : int  1350 0 1109 2317 5883 784 42 1811 0 -849 ...</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ housing  : Factor w/ 2 levels &quot;no&quot;,&quot;yes&quot;: 2 2 1 2 1 1 1 2 2 2 ...</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ day      : int  16 5 13 20 20 30 21 14 21 4 ...</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ duration : int  185 226 328 114 182 149 40 150 425 204 ...</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ campaign : int  1 1 2 1 2 2 1 1 1 1 ...</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ pdays    : num  330 999 999 152 999 999 999 999 999 999 ...</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ previous : int  1 0 0 2 0 0 0 0 0 0 ...</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ deposit  : Factor w/ 2 levels &quot;no&quot;,&quot;yes&quot;: 1 1 1 1 1 1 1 1 1 1 ...</span></span></code></pre></div>
+<p>The <em>bank</em> dataset has 904 observations and 11 variables. The
+data is related with direct marketing campaigns of a Portuguese banking
+institution. Except the outcome <em>deposit</em>, there are 3
+categorical predictors and 7 continuous predictors.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(bank<span class="sc">$</span>deposit)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  no yes </span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 800 104</span></span></code></pre></div>
+<p>In the outcome <em>deposit</em>, “yes” means that the clients have
+subscribed a term deposit while “no” means that the clients have not
+subscribed a term deposit. There are 800 “no” examples and 104 “yes”
+examples. The imbalanced ratio (IR) is about 7.69.</p>
+<p>We would like to find the difference between these two kinds of
+desired targets. Therefore, a good performance of a classifier to
+classify them correctly is expected.</p>
+<p>First of all, we need to separate this dataset into a training set
+and a testing set. 0.7 would be used as the cutoff.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2019</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>inTrain <span class="ot">&lt;-</span> caret<span class="sc">::</span><span class="fu">createDataPartition</span>(bank<span class="sc">$</span>deposit, <span class="at">p =</span> <span class="fl">0.7</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>bank_train <span class="ot">&lt;-</span> bank[inTrain, ]</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>bank_test <span class="ot">&lt;-</span> bank[<span class="sc">-</span>inTrain, ]</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(bank_train<span class="sc">$</span>deposit)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  no yes </span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 560  73</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(bank_test<span class="sc">$</span>deposit)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  no yes </span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 240  31</span></span></code></pre></div>
+<p>The training set and the testing set are both imbalanced and their
+IRs are roughly the same as the whole dataset.</p>
+<p>Now we apply Support Vector Machine (SVM) with Gaussian kernel on the
+imbalanced training set and then predict the deposit status in the
+testing set to check the classification performance.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2019</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>fit_orig <span class="ot">&lt;-</span> e1071<span class="sc">::</span><span class="fu">svm</span>(deposit <span class="sc">~</span> ., <span class="at">data =</span> bank_train, <span class="at">kernel =</span> <span class="st">&quot;radial&quot;</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">probability=</span><span class="cn">TRUE</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>pred_class <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_orig, bank_test)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>perf_orig <span class="ot">&lt;-</span> <span class="fu">display</span>(pred_class, bank_test<span class="sc">$</span>deposit, <span class="at">positive=</span><span class="st">&quot;yes&quot;</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           Reference</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prediction  no yes</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        no  236  31</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        yes   4   0</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(perf_orig, <span class="at">row.names=</span><span class="cn">FALSE</span>)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -564,52 +637,52 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tr>
 </tbody>
 </table>
-<p>According to the result, the accuracy of this model is realy high. But all examples with “yes” (i.e., the minority samples) were classified incorrectly so that sensitivity is 0. This performance is very bad. There is a large space to improve it.</p>
+<p>According to the result, the accuracy of this model is realy high.
+But all examples with “yes” (i.e., the minority samples) were classified
+incorrectly so that sensitivity is 0. This performance is very bad.
+There is a large space to improve it.</p>
 <p>Then we use ROS, RUS, SBC and SMOTE-NC to balance it.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">set.seed</span>(<span class="dv">2019</span>)</a>
-<a class="sourceLine" id="cb13-2" title="2">train_ros &lt;-<span class="st"> </span><span class="kw">ROS</span>(bank_train, <span class="st">&quot;deposit&quot;</span>)</a>
-<a class="sourceLine" id="cb13-3" title="3">train_rus &lt;-<span class="st"> </span><span class="kw">RUS</span>(bank_train, <span class="st">&quot;deposit&quot;</span>)</a>
-<a class="sourceLine" id="cb13-4" title="4">train_sbc &lt;-<span class="st"> </span><span class="kw">SBC</span>(bank_train, <span class="st">&quot;deposit&quot;</span>)</a>
-<a class="sourceLine" id="cb13-5" title="5">train_smotenc &lt;-<span class="st"> </span><span class="kw">SMOTE_NC</span>(bank_train, <span class="st">&quot;deposit&quot;</span>)</a>
-<a class="sourceLine" id="cb13-6" title="6"></a>
-<a class="sourceLine" id="cb13-7" title="7">fit_ros &lt;-<span class="st"> </span>e1071<span class="op">::</span><span class="kw">svm</span>(deposit <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>train_ros, <span class="dt">kernel=</span><span class="st">&quot;radial&quot;</span>, <span class="dt">probability=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb13-8" title="8">fit_rus &lt;-<span class="st"> </span>e1071<span class="op">::</span><span class="kw">svm</span>(deposit <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>train_rus, <span class="dt">kernel=</span><span class="st">&quot;radial&quot;</span>, <span class="dt">probability=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb13-9" title="9">fit_sbc &lt;-<span class="st"> </span>e1071<span class="op">::</span><span class="kw">svm</span>(deposit <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>train_sbc, <span class="dt">kernel=</span><span class="st">&quot;radial&quot;</span>, <span class="dt">probability=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb13-10" title="10">fit_smotenc &lt;-<span class="st"> </span>e1071<span class="op">::</span><span class="kw">svm</span>(deposit <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>train_smotenc, <span class="dt">kernel=</span><span class="st">&quot;radial&quot;</span>, <span class="dt">probability=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb13-11" title="11"></a>
-<a class="sourceLine" id="cb13-12" title="12">pred_class_ros &lt;-<span class="st"> </span><span class="kw">predict</span>(fit_ros, bank_test)</a>
-<a class="sourceLine" id="cb13-13" title="13">perf_ros &lt;-<span class="st"> </span><span class="kw">display</span>(pred_class_ros, bank_test<span class="op">$</span>deposit, <span class="st">&quot;yes&quot;</span>)  </a>
-<a class="sourceLine" id="cb13-14" title="14"><span class="co">#&gt;           Reference</span></a>
-<a class="sourceLine" id="cb13-15" title="15"><span class="co">#&gt; Prediction  no yes</span></a>
-<a class="sourceLine" id="cb13-16" title="16"><span class="co">#&gt;        no  187  10</span></a>
-<a class="sourceLine" id="cb13-17" title="17"><span class="co">#&gt;        yes  53  21</span></a>
-<a class="sourceLine" id="cb13-18" title="18">pred_class_rus &lt;-<span class="st"> </span><span class="kw">predict</span>(fit_rus, bank_test)</a>
-<a class="sourceLine" id="cb13-19" title="19">perf_rus &lt;-<span class="st"> </span><span class="kw">display</span>(pred_class_rus, bank_test<span class="op">$</span>deposit, <span class="st">&quot;yes&quot;</span>)</a>
-<a class="sourceLine" id="cb13-20" title="20"><span class="co">#&gt;           Reference</span></a>
-<a class="sourceLine" id="cb13-21" title="21"><span class="co">#&gt; Prediction  no yes</span></a>
-<a class="sourceLine" id="cb13-22" title="22"><span class="co">#&gt;        no  182   8</span></a>
-<a class="sourceLine" id="cb13-23" title="23"><span class="co">#&gt;        yes  58  23</span></a>
-<a class="sourceLine" id="cb13-24" title="24">pred_class_sbc &lt;-<span class="st"> </span><span class="kw">predict</span>(fit_sbc, bank_test)</a>
-<a class="sourceLine" id="cb13-25" title="25">perf_sbc &lt;-<span class="st"> </span><span class="kw">display</span>(pred_class_sbc, bank_test<span class="op">$</span>deposit, <span class="st">&quot;yes&quot;</span>)</a>
-<a class="sourceLine" id="cb13-26" title="26"><span class="co">#&gt;           Reference</span></a>
-<a class="sourceLine" id="cb13-27" title="27"><span class="co">#&gt; Prediction  no yes</span></a>
-<a class="sourceLine" id="cb13-28" title="28"><span class="co">#&gt;        no  134   5</span></a>
-<a class="sourceLine" id="cb13-29" title="29"><span class="co">#&gt;        yes 106  26</span></a>
-<a class="sourceLine" id="cb13-30" title="30">pred_class_smotenc &lt;-<span class="st"> </span><span class="kw">predict</span>(fit_smotenc, bank_test)</a>
-<a class="sourceLine" id="cb13-31" title="31">perf_smotenc &lt;-<span class="st"> </span><span class="kw">display</span>(pred_class_smotenc, bank_test<span class="op">$</span>deposit, <span class="st">&quot;yes&quot;</span>)</a>
-<a class="sourceLine" id="cb13-32" title="32"><span class="co">#&gt;           Reference</span></a>
-<a class="sourceLine" id="cb13-33" title="33"><span class="co">#&gt; Prediction  no yes</span></a>
-<a class="sourceLine" id="cb13-34" title="34"><span class="co">#&gt;        no  223  21</span></a>
-<a class="sourceLine" id="cb13-35" title="35"><span class="co">#&gt;        yes  17  10</span></a>
-<a class="sourceLine" id="cb13-36" title="36"></a>
-<a class="sourceLine" id="cb13-37" title="37">output &lt;-<span class="st"> </span><span class="kw">rbind</span>(perf_orig, perf_ros, perf_rus, perf_sbc, perf_smotenc)</a>
-<a class="sourceLine" id="cb13-38" title="38"><span class="kw">rownames</span>(output) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Imbalanced&quot;</span>, <span class="st">&quot;Balanced by ROS&quot;</span>, <span class="st">&quot;Balanced by RUS&quot;</span>,</a>
-<a class="sourceLine" id="cb13-39" title="39">                      <span class="st">&quot;Balanced by SBC&quot;</span>, <span class="st">&quot;Balanced by SMOTE-NC&quot;</span>)</a>
-<a class="sourceLine" id="cb13-40" title="40">knitr<span class="op">::</span><span class="kw">kable</span>(output)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2019</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>train_ros <span class="ot">&lt;-</span> <span class="fu">ROS</span>(bank_train, <span class="st">&quot;deposit&quot;</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>train_rus <span class="ot">&lt;-</span> <span class="fu">RUS</span>(bank_train, <span class="st">&quot;deposit&quot;</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>train_sbc <span class="ot">&lt;-</span> <span class="fu">SBC</span>(bank_train, <span class="st">&quot;deposit&quot;</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>train_smotenc <span class="ot">&lt;-</span> <span class="fu">SMOTE_NC</span>(bank_train, <span class="st">&quot;deposit&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fit_ros <span class="ot">&lt;-</span> e1071<span class="sc">::</span><span class="fu">svm</span>(deposit <span class="sc">~</span> ., <span class="at">data=</span>train_ros, <span class="at">kernel=</span><span class="st">&quot;radial&quot;</span>, <span class="at">probability=</span><span class="cn">TRUE</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>fit_rus <span class="ot">&lt;-</span> e1071<span class="sc">::</span><span class="fu">svm</span>(deposit <span class="sc">~</span> ., <span class="at">data=</span>train_rus, <span class="at">kernel=</span><span class="st">&quot;radial&quot;</span>, <span class="at">probability=</span><span class="cn">TRUE</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>fit_sbc <span class="ot">&lt;-</span> e1071<span class="sc">::</span><span class="fu">svm</span>(deposit <span class="sc">~</span> ., <span class="at">data=</span>train_sbc, <span class="at">kernel=</span><span class="st">&quot;radial&quot;</span>, <span class="at">probability=</span><span class="cn">TRUE</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>fit_smotenc <span class="ot">&lt;-</span> e1071<span class="sc">::</span><span class="fu">svm</span>(deposit <span class="sc">~</span> ., <span class="at">data=</span>train_smotenc, <span class="at">kernel=</span><span class="st">&quot;radial&quot;</span>, <span class="at">probability=</span><span class="cn">TRUE</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>pred_class_ros <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_ros, bank_test)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>perf_ros <span class="ot">&lt;-</span> <span class="fu">display</span>(pred_class_ros, bank_test<span class="sc">$</span>deposit, <span class="st">&quot;yes&quot;</span>)  </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           Reference</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prediction  no yes</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        no  187  10</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        yes  53  21</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>pred_class_rus <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_rus, bank_test)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>perf_rus <span class="ot">&lt;-</span> <span class="fu">display</span>(pred_class_rus, bank_test<span class="sc">$</span>deposit, <span class="st">&quot;yes&quot;</span>)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           Reference</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prediction  no yes</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        no  182   8</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        yes  58  23</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>pred_class_sbc <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_sbc, bank_test)</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>perf_sbc <span class="ot">&lt;-</span> <span class="fu">display</span>(pred_class_sbc, bank_test<span class="sc">$</span>deposit, <span class="st">&quot;yes&quot;</span>)</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           Reference</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prediction  no yes</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        no  134   5</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        yes 106  26</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>pred_class_smotenc <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_smotenc, bank_test)</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>perf_smotenc <span class="ot">&lt;-</span> <span class="fu">display</span>(pred_class_smotenc, bank_test<span class="sc">$</span>deposit, <span class="st">&quot;yes&quot;</span>)</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           Reference</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prediction  no yes</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        no  195  14</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        yes  45  17</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> <span class="fu">rbind</span>(perf_orig, perf_ros, perf_rus, perf_sbc, perf_smotenc)</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(output) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Imbalanced&quot;</span>, <span class="st">&quot;Balanced by ROS&quot;</span>, <span class="st">&quot;Balanced by RUS&quot;</span>,</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;Balanced by SBC&quot;</span>, <span class="st">&quot;Balanced by SMOTE-NC&quot;</span>)</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(output)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
-<th></th>
+<th align="left"></th>
 <th align="right">Accuracy</th>
 <th align="right">Sensitivity</th>
 <th align="right">Specificity</th>
@@ -617,38 +690,42 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td>Imbalanced</td>
+<td align="left">Imbalanced</td>
 <td align="right">0.8708487</td>
 <td align="right">0.0000000</td>
 <td align="right">0.9833333</td>
 </tr>
 <tr class="even">
-<td>Balanced by ROS</td>
+<td align="left">Balanced by ROS</td>
 <td align="right">0.7675277</td>
 <td align="right">0.6774194</td>
 <td align="right">0.7791667</td>
 </tr>
 <tr class="odd">
-<td>Balanced by RUS</td>
+<td align="left">Balanced by RUS</td>
 <td align="right">0.7564576</td>
 <td align="right">0.7419355</td>
 <td align="right">0.7583333</td>
 </tr>
 <tr class="even">
-<td>Balanced by SBC</td>
+<td align="left">Balanced by SBC</td>
 <td align="right">0.5904059</td>
 <td align="right">0.8387097</td>
 <td align="right">0.5583333</td>
 </tr>
 <tr class="odd">
-<td>Balanced by SMOTE-NC</td>
-<td align="right">0.8597786</td>
-<td align="right">0.3225806</td>
-<td align="right">0.9291667</td>
+<td align="left">Balanced by SMOTE-NC</td>
+<td align="right">0.7822878</td>
+<td align="right">0.5483871</td>
+<td align="right">0.8125000</td>
 </tr>
 </tbody>
 </table>
-<p>As we can see, all of these four algorithms helped to improve the performance of random forest more or less. On the premise of ensuring a good accuracy of a classifier, the sensitivity, which is highly related to the minority class that we are more concerned, is improved by our resampling strategies.</p>
+<p>As we can see, all of these four algorithms helped to improve the
+performance of random forest more or less. On the premise of ensuring a
+good accuracy of a classifier, the sensitivity, which is highly related
+to the minority class that we are more concerned, is improved by our
+resampling strategies.</p>
 </div>
 
 

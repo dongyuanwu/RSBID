@@ -87,7 +87,9 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
     }
 
 
-    min_cl <- names(table(y))[which.min(table(y))]
+    min_cl_char <- names(table(y))[which.min(table(y))]
+    min_cl <- unique(y[y == min_cl_char])
+
     min_ind <- which(y == min_cl)
     maj_ind <- which(y != min_cl)
 
@@ -106,8 +108,8 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
     new_min <- NULL
 
     syn_size <- get_syn_size(perc_maj, maj_len = length(maj_ind), min_len = length(min_ind))
-    
-    pb <- txtProgressBar(min=1, max=nrow(x_min), initial=1, style=3)
+
+    pb <- txtProgressBar(min = 1, max = nrow(x_min), initial = 1, style = 3)
 
     for (i in 1:nrow(x_min)) {
 
@@ -128,12 +130,13 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
 
         replacement <- ifelse(syn_size[i] >= k, TRUE, FALSE)
         ind <- sample(knn_ind, syn_size[i], replace = replacement)
-        if (syn_size[i] == 0) 
+        if (syn_size[i] == 0)
             next
         if (length(cont_posi) == 1) {
             new_cont <- x_min_cont[i, ] + runif(syn_size[i], 0, 1) * (x_min_cont[ind, ] - x_min_cont[i, ])
         } else {
-            new_cont <- apply(x_min_cont[ind, ], 1, function(x) x_min_cont[i, ] + runif(syn_size[i], 0, 1) * (x - x_min_cont[i, ]))
+            new_cont <- apply(x_min_cont[ind, ], 1, function(x) x_min_cont[i, ] + runif(syn_size[i], 0, 1) * (x - x_min_cont[i,
+                ]))
         }
 
         new_cont <- as.data.frame(matrix(unlist(new_cont), ncol = ncol(x_min_cont), byrow = TRUE))
@@ -154,7 +157,7 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
         new_contcat <- new_contcat[, x_coln]
 
         new_min <- rbind(new_min, new_contcat)
-        
+
         setTxtProgressBar(pb, i)
 
 

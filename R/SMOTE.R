@@ -81,7 +81,9 @@ SMOTE <- function(data, outcome, perc_maj = 100, k = 5) {
              Please check your dataset again.")
     }
 
-    min_cl <- names(table(y))[which.min(table(y))]
+    min_cl_char <- names(table(y))[which.min(table(y))]
+    min_cl <- unique(y[y == min_cl_char])
+
     min_ind <- which(y == min_cl)
     maj_ind <- which(y != min_cl)
 
@@ -97,7 +99,7 @@ SMOTE <- function(data, outcome, perc_maj = 100, k = 5) {
     for (i in 1:nrow(x_min)) {
         replacement <- ifelse(syn_size[i] >= k, TRUE, FALSE)
         ind <- sample(knn_ind[i, ], syn_size[i], replace = replacement)
-        if (syn_size[i] == 0) 
+        if (syn_size[i] == 0)
             next
         temp <- apply(x_min[ind, ], 1, function(x) x_min[i, ] + runif(syn_size[i], 0, 1) * (x - x_min[i, ]))
         temp <- matrix(unlist(temp), ncol = ncol(x_min), byrow = TRUE)

@@ -1,8 +1,8 @@
 ---
-title: "Introduction to the RSBID Package"
+title: "RSBID_Introduction"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to the RSBID Package}
+  %\VignetteIndexEntry{RSBID_Introduction}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -170,12 +170,16 @@ According to the result, the accuracy of this model is realy high. But all examp
 
 Then we use ROS, RUS, SBC and SMOTE-NC to balance it.
 
-```{r}
+```{r, results='hide', message=FALSE}
 set.seed(2019)
 train_ros <- ROS(bank_train, "deposit")
 train_rus <- RUS(bank_train, "deposit")
 train_sbc <- SBC(bank_train, "deposit")
 train_smotenc <- SMOTE_NC(bank_train, "deposit")
+
+```
+
+```{r}
 fit_ros <- e1071::svm(deposit ~ ., data=train_ros, kernel="radial", probability=TRUE)
 fit_rus <- e1071::svm(deposit ~ ., data=train_rus, kernel="radial", probability=TRUE)
 fit_sbc <- e1071::svm(deposit ~ ., data=train_sbc, kernel="radial", probability=TRUE)
