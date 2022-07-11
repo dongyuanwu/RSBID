@@ -44,7 +44,7 @@ RUS <- function(data, outcome, perc_min = 100) {
     if (table(y)[1] == table(y)[2]) {
         stop("Sorry, this dataset has been balanced and there is nothing I can do.")
     }
-    if (class(y) != "factor" & class(y) != "character") {
+    if (!inherits(y, "character") & !inherits(y, "factor")) {
         warning("The outcome is a binary variable, but not a factor or character.")
         y <- as.factor(y)
     }
