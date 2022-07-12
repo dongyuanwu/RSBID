@@ -64,8 +64,7 @@ SMOTE_NC <- function(data, outcome, perc_maj = 100, k = 5) {
         stop("Sorry, this dataset has been balanced and there is nothing I can do.")
     }
     if (!inherits(y, "character") & !inherits(y, "factor")) {
-        warning("The outcome is not a factor or character.")
-        y <- as.factor(y)
+        warning("The outcome is a binary variable, but not a factor or character.")
     }
 
     x_cl <- sapply(data[, -y_ind], class)

@@ -97,7 +97,6 @@ SBC <- function(data, outcome, perc_min = 100, k = 3, iter_max = 100, nstart = 1
     }
     if (!inherits(y, "character") & !inherits(y, "factor")) {
         warning("The outcome is a binary variable, but not a factor or character.")
-        y <- as.factor(y)
     }
 
     x_cl <- sapply(data[, -y_ind], class)

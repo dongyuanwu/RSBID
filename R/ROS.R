@@ -46,7 +46,6 @@ ROS <- function(data, outcome, perc_maj = 100) {
     }
     if (!inherits(y, "character") & !inherits(y, "factor")) {
         warning("The outcome is a binary variable, but not a factor or character.")
-        y <- as.factor(y)
     }
     maj_cl <- names(table(y))[which.max(table(y))]
     maj_ind <- which(y == maj_cl)

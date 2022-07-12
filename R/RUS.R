@@ -46,7 +46,6 @@ RUS <- function(data, outcome, perc_min = 100) {
     }
     if (!inherits(y, "character") & !inherits(y, "factor")) {
         warning("The outcome is a binary variable, but not a factor or character.")
-        y <- as.factor(y)
     }
     min_cl <- names(table(y))[which.min(table(y))]
     min_ind <- which(y == min_cl)
