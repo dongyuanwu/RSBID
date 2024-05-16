@@ -12,7 +12,7 @@
 #'   \item{Shucked_weight}{Real [0.0010, 1.488]}
 #'   \item{Viscera_weight}{Real [5.0E-4, 0.76]}
 #'   \item{Shell_weight}{Real [0.0015, 1.005]}
-#'   \item{Class}{Nominal {positive, negative}}
+#'   \item{Class}{Nominal \{positive, negative\}}
 #'   ...
 #' }
 #' @source \url{KEEL}{https://sci2s.ugr.es/keel/datasets.php}

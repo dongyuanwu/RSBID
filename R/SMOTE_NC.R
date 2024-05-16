@@ -22,6 +22,7 @@
 ##' SMOTE: synthetic minority over-sampling technique. \emph{Journal of artificial
 ##' intelligence research}, 16, 321-357.
 ##' @import stats
+##' @importFrom utils setTxtProgressBar txtProgressBar
 ##' @export
 ##' @useDynLib RSBID
 ##' @examples

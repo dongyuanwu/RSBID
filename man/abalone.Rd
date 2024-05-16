@@ -14,7 +14,7 @@ A data frame with 731 rows and 8 variables:
   \item{Shucked_weight}{Real [0.0010, 1.488]}
   \item{Viscera_weight}{Real [5.0E-4, 0.76]}
   \item{Shell_weight}{Real [0.0015, 1.005]}
-  \item{Class}{Nominal {positive, negative}}
+  \item{Class}{Nominal \{positive, negative\}}
   ...
 }
 }
